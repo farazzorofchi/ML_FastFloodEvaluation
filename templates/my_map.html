@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Exposure Map
+{% endblock %}
+
+{% block main %}
+
+
+   <!-- Load require.js. Delete this if your page already loads require.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "605cbc828d944f0cba6da2d3f4842a41": {
+      "model_name": "LeafletAwesomeIconModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "icon_color": "{{ col }}",
+        "options": [],
+        "spin": true
+      }
+    },
+    "a0e32b92a32542799a1cd22c70a4c232": {
+      "model_name": "LeafletMapStyleModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {}
+    },
+    "5b8651dadfbb493ba003a6425b4c5c02": {
+      "model_name": "LeafletMapStyleModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "cursor": "move"
+      }
+    },
+    "1b049d49e5ce4d82a63d69282c8f9507": {
+      "model_name": "LeafletTileLayerModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+        "base": true,
+        "max_zoom": 20,
+        "min_zoom": 1,
+        "name": "Esri.WorldImagery",
+        "options": [
+          "attribution",
+          "detect_retina",
+          "max_native_zoom",
+          "max_zoom",
+          "min_native_zoom",
+          "min_zoom",
+          "no_wrap",
+          "tile_size",
+          "tms"
+        ],
+        "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+      }
+    },
+    "b2c8ad675b064b2ead6d67a71e62cd51": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "c28d28a0ad334ddab8d88b78c84780ff": {
+      "model_name": "LeafletMapStyleModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {}
+    },
+    "7aad471273db4667b08f5e225f1944cb": {
+      "model_name": "LeafletMapModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "_dom_classes": [],
+        "center": [
+            {{ lat }},
+            {{ lon }}
+        ],
+        "controls": [
+          "IPY_MODEL_4b1f814d7d574081addaa2888d464b7e",
+          "IPY_MODEL_335e3bdddadf4af1993e462c1609f040"
+        ],
+        "crs": {
+          "name": "EPSG3857",
+          "custom": false
+        },
+        "default_style": "IPY_MODEL_a0e32b92a32542799a1cd22c70a4c232",
+        "dragging_style": "IPY_MODEL_5b8651dadfbb493ba003a6425b4c5c02",
+        "layers": [
+          "IPY_MODEL_1b049d49e5ce4d82a63d69282c8f9507",
+          "IPY_MODEL_684fb98d94634498b8304ecaa1447f52"
+        ],
+        "layout": "IPY_MODEL_b2c8ad675b064b2ead6d67a71e62cd51",
+        "options": [
+          "bounce_at_zoom_limits",
+          "box_zoom",
+          "center",
+          "close_popup_on_click",
+          "double_click_zoom",
+          "dragging",
+          "fullscreen",
+          "inertia",
+          "inertia_deceleration",
+          "inertia_max_speed",
+          "interpolation",
+          "keyboard",
+          "keyboard_pan_offset",
+          "keyboard_zoom_offset",
+          "max_zoom",
+          "min_zoom",
+          "scroll_wheel_zoom",
+          "tap",
+          "tap_tolerance",
+          "touch_zoom",
+          "world_copy_jump",
+          "zoom",
+          "zoom_animation_threshold",
+          "zoom_delta",
+          "zoom_snap",
+          "zoom_start"
+        ],
+        "style": "IPY_MODEL_c28d28a0ad334ddab8d88b78c84780ff",
+        "zoom": 16.0
+      }
+    },
+    "4b1f814d7d574081addaa2888d464b7e": {
+      "model_name": "LeafletZoomControlModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "options": [
+          "position",
+          "zoom_in_text",
+          "zoom_in_title",
+          "zoom_out_text",
+          "zoom_out_title"
+        ]
+      }
+    },
+    "335e3bdddadf4af1993e462c1609f040": {
+      "model_name": "LeafletAttributionControlModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "options": [
+          "position",
+          "prefix"
+        ],
+        "position": "bottomright"
+      }
+    },
+    "684fb98d94634498b8304ecaa1447f52": {
+      "model_name": "LeafletMarkerModel",
+      "model_module": "jupyter-leaflet",
+      "model_module_version": "^0.13.1",
+      "state": {
+        "draggable": false,
+        "icon": "IPY_MODEL_605cbc828d944f0cba6da2d3f4842a41",
+        "location": [
+            {{ lat }},
+            {{ lon }}
+        ],
+        "options": [
+          "alt",
+          "draggable",
+          "keyboard",
+          "rise_offset",
+          "rise_on_hover",
+          "rotation_angle",
+          "rotation_origin",
+          "title",
+          "z_index_offset"
+        ],
+        "popup": "IPY_MODEL_e69321d52ce941ecaf0fd50b1dc745c6"
+      }
+    },
+    "5bad54d7778941a189556e5a36eeac23": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "c7149b7c25354a54887e1d7502c41e52": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "e69321d52ce941ecaf0fd50b1dc745c6": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_5bad54d7778941a189556e5a36eeac23",
+        "style": "IPY_MODEL_c7149b7c25354a54887e1d7502c41e52",
+        "value": "<p> Building Loss Ratio = {{ LR }} </p>"
+      }
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "7aad471273db4667b08f5e225f1944cb"}
+</script>
+<div style="margin-left:50px">
+    {% if len_image %}
+        <img style="float:left;" src={{zip_URL}} >
+        <br>
+        <br>
+        <br> Predicted loss ratio of building of interest = {{ LR }}
+        <br>
+        <br>
+        <br> <u> <b> Stats for the ZIP Code {{ zip }} based on historical FEMA claims data: </b> </u>
+        <br>
+        <br> Count of claims in the ZIP Code = {{ len_zip }}
+        <br>
+        <br> Minimum Loss Ratio of the ZIP Code = {{ min_LR }}
+        <br>
+        <br> Average Loss Ratio of the ZIP Code = {{ mean_LR }}
+        <br>
+        <br> Maximum Loss Ratio of the ZIP Code = {{ max_LR }}
+
+    {% else %}
+        <p>
+            There has been no flood claims reported for this Zip Code.
+        </p>
+        <p>
+            Loss ratio of building of interest = {{ LR }}
+        </p>
+    {% endif %}
+</div>
+
+
+    {% endblock %}
+
+

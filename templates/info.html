@@ -1,0 +1,193 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Input
+{% endblock %}
+
+{% block main %}
+    <form action="/input_information" method="post">
+        <b> Agriculture Structure: </b>
+        <br>
+        Yes or No whether or not a building is reported as being an agricultural structure in the policy application.
+        <br>
+        <br>
+        <b>Basement:</b>
+        <ul>
+            <li>Without</li>
+            <li>1 - Finished basement/enclosure</li>
+            <li>2 - Unfinished basement/enclosure</li>
+            <li>3 - Crawlspace</li>
+            <li>4 - Subgrade crawlspace</li>
+        </ul>
+        <br>
+        <b>Condominium Indicator:</b>
+        <ul>
+            <li>N - Not a condominium</li>
+            <li>U - An individual condominium unit owned by a unit owner, or by a condominium association</li>
+            <li>A - The entire condominium building owned by the association insuring building common elements as well as building elements (additions and alterations) within all units in the building, not eligible under Condominium Master Policy</li>
+            <li>H - The entire residential condominium building owned by the association eligible under Condominium Master Policy,insuring the entire condominium building common elements as well as building elements (additions and alterations) within all units in the building for High-Rise</li>
+            <li>L - The entire residential condominium building owned by the association eligible under Condominium Master Policy,insuring the entire condominium building common elements as well as building elements (additions and alterations) within all units in the building for Low-Rise</li>
+        </ul>
+        <br>
+        <b>Policy Count:</b>
+        <br>
+        Insured units in an active status. A policy contract ceases to be in an active status as of the cancellation date or the expiration date. Residential Condominium Building Association Policy (RCBAP) contracts are stored as a single policy contract but insure multiple units and therefore represent multiple policies.
+        <br>
+        <br>
+        <b>CRS Discount:</b>
+        <br>
+        The Community Rating System (CRS) Classification Credit Percentage used to rate the policy. The insurance premium credit is based on whether a property is in or out of the Special Flood Hazard Area (SFHA) as shown on the community's Flood Insurance Rate Map.  The premium credit for properties in the SFHA increases according to a community's CRS class
+        <br>
+        1 - SFHA 45% ** Non SFHA 10% **
+        <br>
+        2 - SFHA 40% ** Non SFHA 10% **
+        <br>
+        3 - SFHA 35% ** Non SFHA 10% **
+        <br>
+        4 - SFHA 30% ** Non SFHA 10% **
+        <br>
+        5 - SFHA 25% ** Non SFHA 10% **
+        <br>
+        6 - SFHA 20% ** Non SFHA10% **
+        <br>
+        7 - SFHA 15% ** Non SFHA 5% **
+        <br>
+        8 - SFHA 10% ** Non SFHA 5% **
+        <br>
+        9 - SFHA 5%    Non SFHA 5%
+        <br>
+        10 - SFHA 0%  Non SFHA 0%
+        <br>
+        *For the purpose of determining CRS Premium Discounts, all AR and A99 zones are treated as non-SFHAs.
+        <br>
+        **These percentages are subject to change.  Always refer to the Flood Insurance Manual for the latest information.
+        <br>
+        <br>
+        <b>Elevated Building:</b>
+        <br>
+        Yes (Y), No (N), or Unknown (UNK) indicator of whether or not a building meets the NFIP definition of an elevated building. An elevated building is a no-basement building that was constructed so as to meet the following criteria:
+        <br>
+        1. The top of the elevated floor (all A zones) or the bottom of the lowest horizontal structural member of the lowest floor (all V zones) is above ground level
+        <br>
+        2. The building is adequately anchored
+        <br>
+        3. The method of elevation is pilings, columns (posts and piers), shear walls (not in V zones), or solid foundation perimeter walls (not in V zones)
+        <br>
+        <br>
+        <b>Elevation Difference:</b>
+        <br>
+        Difference in feet between the elevation of the lowest floor used for rating or the flood proofed elevation and the base flood elevation (BFE), or base flood depth, as appropriate from the elevation certificate
+        <br>
+        <br>
+        <b>Flood Zone:</b>
+        <ul>
+            <li>A - Special flood with no base flood elevation on FIRM</li>
+            <li>AE - Special flood with base flood elevation on FIRM</li>
+            <li>AH - Special flood with shallow ponding</li>
+            <li>AO - Special flood with sheet flow</li>
+            <li>AR - Special flood hazard area that results from the decertification of a previously accredited flood protection system that is determined to be in the process of being restored to provide base flood protection</li>
+            <li>A99 - Special flood with protection zone</li>
+            <li>V - Velocity flood with no base flood elevation on FIRM</li>
+            <li>VE - Velocity flood with base flood elevation on FIRM</li>
+            <li>X - Moderate-Minimal flood from primary water source. Pockets of areas subject to drainage problems</li>
+        </ul>
+        <br>
+        <b>House Worship:</b>
+        <br>
+        Yes (Y) or No (N) indicator of whether or not a building is reported as being a house of worship in the policy application
+        <br>
+        <br>
+        <b>Location of Contents:</b>
+        <br> Code that indicates where within the structure the contents are located
+        <ul>
+            <li>Unknown</li>
+            <li>1 - Basement/enclosure/crawlspace/subgrade crawlspace only</li>
+            <li>2 - Basement/enclosure/crawlspace/subgrade crawlspace and above</li>
+            <li>3 - Lowest floor only above ground level (no basement/enclosure/crawlspace/subgrade crawlspace)</li>
+            <li>4 - Lowest floor above ground level and higher floors (no basement/enclosure/crawlspace/subgrade crawlspace)</li>
+            <li>5 - Above ground level more than one full floor</li>
+            <li>6 - Manufactured (mobile) home or travel trailer on foundation</li>
+        </ul>
+        <b>Latitude:</b>
+        <br>
+        Latitude of the insured building.
+        <br>
+        <br>
+        <b>Longitude:</b>
+        <br>
+        Longitude of the insured building.
+        <br>
+        <br>
+        <b>Number of Stories:</b>
+        <br>
+        Code that indicates the number of floors in the insured building.
+        <ul>
+            <li>1 - One floor</li>
+            <li>2 - Two floors</li>
+            <li>3 - Three or more floors</li>
+            <li>4 - Split-level</li>
+            <li>5 - Manufactured (mobile) home or travel trailer on foundation</li>
+            <li>6 - Townhouse/Rowhouse with three or more floors (RCBAP low-rise only)</li>
+        </ul>
+        <b>Non-profit:</b>
+        <br>
+        Yes (Y) or No (N) indicator of whether or not a building is reported as being a non-profit in the policy application.
+        <br>
+        <br>
+        <b>Obstruction Type:</b>
+        <br> Code that gives the type of obstruction (if any) in the enclosure (if any).
+        <ul>
+            <li>Unknown</li>
+            <li>10 - With obstruction: no walls, but the elevation of machinery or equipment attached to building is below Base Flood Elevation</li>
+            <li>15 - With obstruction:enclosure/crawlspace with proper openings not used for rating (not applicable in V zones)</li>
+            <li>20 - With obstruction: less than 300 sq. ft. with breakaway walls, but no machinery or equipment attached to building below lowest elevated floor, or elevation of machinery/equipment is at or above Base Flood Elevation</li>
+            <li>24 - With obstruction: less than 300 sq. ft. with breakaway walls or finished enclosure and with machinery or equipment attached to building below lowest elevated floor, and elevation of machinery/equipment is below Base Flood Elevation</li>
+            <li>30 - With obstruction: 300 sq. ft. or more with breakaway walls, but no machinery or equipment attached to building below the Base Flood Elevation</li>
+            <li>34 - With obstruction: 300 sq. ft. or more with breakaway walls or finished enclosure and with machinery or equipment attached to building below the Base Flood Elevation</li>
+            <li>40 - With obstruction:  no walls, but the elevation of machinery or equipment attached to building is at or above Base Flood Elevation</li>
+            <li>50 - With obstruction:  non-breakaway walls/crawlspace or finished enclosure with no machinery or equipment attached to building below lowest elevated floor</li>
+            <li>54 - With obstruction:  non-breakaway walls/crawlspace or finished enclosure with machinery or equipment attached to building below lowest elevated floor</li>
+            <li>60 - With obstruction</li>
+            <li>70 - With Certification subgrade crawlspace (AE, A01-A30, unnumbered A, AO, AH, AOB, AHB zones)</li>
+            <li>80 - Without Certification subgrade crawlspace (all zones)</li>
+            <li>90 - With Enclosure: Elevated buildings with elevator below the BFE in A zones. No other enclosure below the BFE</li>
+            <li>92 - With Enclosure: Elevated buildings with elevator below the BFE in A zones. Enclosure below the BFE has no proper openings, is finished, or is used for other than parking, building access, or storage</li>
+            <li>94 - With Obstruction: Elevated buildings with elevator below the BFE in V zones. No other obstruction or machinery and equipment (M&E) servicing the building located below the BFE</li>
+            <li>95 - With Obstruction: Elevated buildings with elevator below the BFE in V zones. Breakaway wall obstruction is unfinished and elevator and obstruction are located below the BFE, but no machinery and equipment (M&E) servicing the building is located below the BFE</li>
+            <li>96 - With Obstruction: Elevated buildings with elevator below the BFE in V zones. Breakaway wall obstruction is finished or is used for other than parking, building access, or storage</li>
+            <li>98 - With Obstruction: Elevated buildings with elevator below the BFE in V zones. Breakaway walls obstruction and M&E servicing the building are located below the BFE</li>
+        </ul>
+        <b>Occupancy Type:</b>
+        <br>
+        Code indicating the use and occupancy type of the insured structure.
+        <ul>
+            <li>1 - Single family residence</li>
+            <li>2 - 2 to 4 unit residential building</li>
+            <li>3 - Residential building with more than 4 units</li>
+            <li>4 - Non-residential building</li>
+        </ul>
+        <b>Post FIRM Structure:</b>
+        <br> Yes, No, or Unknown Indicator on whether construction was started before or after publication of the FIRM.  For insurance rating purposes, buildings for which the start of construction or substantial improvement was after December 31, 1974, or on or after the effective date of the initial FIRM for the community, whichever is later, are considered Post-FIRM construction.
+        <br>
+        <br>
+        <b>Year Built:</b>
+        <br> The original date of the construction of the building.
+        <br>
+        <br>
+        <b>Year of Loss:</b>
+        <br> Year in which the flood loss occurred. For evaluation of a new building, use the current year.
+        <br>
+        <br>
+        <b>ZIP Code:</b>
+        <br> 5 digit Postal Zip Code of the insured property
+
+
+
+
+
+
+
+
+    </form>
+{% endblock %}
+

@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Input
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="/input" method="post">
+        Please see the <a href="/input_information"> input information</a> to know more about below attributes.
+        <br>
+        <br>
+        <div>
+            <label style="float:left;" for="agr"> Agricultural structure</label>
+            <select style="float:left; margin-left:3px;" id="agr" name="agriculture">
+                <option value="N">No</option>
+                <option value="Y">Yes</option>
+            </select>
+            <label style="padding: 0px 0px 0px 200px;" for="base" >Basement</label>
+            <select id="base" name="basement">
+                <option value="0.0">Without</option>
+                <option value="1.0">1</option>
+                <option value="2.0">2</option>
+                <option value="3.0">3</option>
+                <option value="4.0">4</option>
+            </select>
+        </div>
+        <p> </p>
+
+        <div>
+                <label style="float:left;" for="cnd"> Condominium indicator</label>
+                <select style="float:left; margin-left:3px;" id="cnd" name="condominium">
+                    <option value="N">N</option>
+                    <option value="U">U</option>
+                    <option value="A">A </option>
+                    <option value="H">H </option>
+                    <option value="L">L </option>
+                </select>
+                <label style="padding: 0px 0px 0px 200px;" for="plc" > Policy Count</label>
+                <input autocomplete="off" autofocus name="policycount" id="plc" placeholder="1" type="number" min="1" required/>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;"  for="crs"> CRS Discount </label>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="crsdiscount" id="crs" placeholder="0" type="number" step=".05" min ="0" max="0.5" required/>
+            <label style="padding: 0px 0px 0px 240px;" for="elvstr" > Elevated Building</label>
+            <select id="elvstr" name="elevatedbuilding">
+                <option value="UNK">Unknown</option>
+                <option value="N">No</option>
+                <option value="Y">Yes</option>
+            </select>
+         </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="elvdiff"> Elevation Difference</label>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="elevationdifference" id="elvdiff" placeholder="0" type="number" step=".1" required/>
+            <label style="padding: 0px 0px 0px 83px;" for="fldzone" > Flood Zone</label>
+            <select id="fldzone" name="floodzone">
+                <option value="A">A </option>
+                <option value="AE">AE </option>
+                <option value="V">V </option>
+                <option value="VE">VE </option>
+                <option value="AO">AO </option>
+                <option value="AH">AH </option>
+                <option value="AR">AR </option>
+                <option value="A99">A99 </option>
+                <option value="X">X </option>
+            </select>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="house"> House Worship</label>
+            <select style="float:left;margin-left:3px;" id="house" name="houseworship">
+                <option value="N">No</option>
+                <option value="Y">Yes</option>
+            </select>
+            <label style="padding: 0px 0px 0px 245px;" for="loccnt" > Location of Contents</label>
+            <select id="loccnt" name="locationofcontents">
+                <option value="UNK">Unknown</option>
+                <option value="Basement/Enclosure/Crawlspace/Subgrade Crawlspace only">1 </option>
+                <option value="Basement/Enclosure/Crawlspace/Subgrade Crawlspace and above">2 </option>
+                <option value="Lowest floor only above ground level (No basement/enclosure/crawlspace/subgrade crawlspace)">3 </option>
+                <option value="Lowest floor above ground level and higher floors (No basement/enclosure/crawlspace/subgrade crawlspace)">4 </option>
+                <option value="Above ground level more than one full floor">5 </option>
+                <option value="Manufactured (mobile) home or travel trailer on foundation">6 </option>
+            </select>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="lat"> Latitude</label>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="latitude" id="lat" placeholder="64.549863" type="number" step=".000001" required/>
+            <label style="padding: 0px 0px 0px 170px;" for="lon" > Longitude</label>
+            <input autocomplete="off" autofocus name="longitude" id="lon" placeholder="-147.023078" type="number" step=".000001" required/>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="numst"> Number of Stories</label>
+            <select style="float:left;margin-left:3px;" id="numst" name="numberofstories">
+                <option value="1.0">1</option>
+                <option value="2.0">2 </option>
+                <option value="3.0">3 </option>
+                <option value="4.0">4 </option>
+                <option value="5.0">5 </option>
+                <option value="6.0">6 </option>
+            </select>
+
+            <label style="padding: 0px 0px 0px 242px;" for="nonprof" > Non-profit</label>
+            <select id="nonprof" name="nonprofit">
+                <option value="N">No</option>
+                <option value="Y">Yes</option>
+            </select>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="obs"> Obstruction Type</label>
+            <select style="float:left;margin-left:3px;" id="obs" name="obstruction">
+                <option value="UNK">Unknown</option>
+                <option value="10.0">10 </option>
+                <option value="15.0">15 </option>
+                <option value="20.0">20</option>
+                <option value="24.0">24</option>
+                <option value="30.0">30</option>
+                <option value="34.0">34</option>
+                <option value="40.0">40</option>
+                <option value="50.0">50 </option>
+                <option value="54.0">54 </option>
+                <option value="60.0">60 </option>
+                <option value="70.0">70 </option>
+                <option value="80.0">80 </option>
+                <option value="90.0">90 </option>
+                <option value="92.0">92 </option>
+                <option value="94.0">94 </option>
+                <option value="95.0">95 </option>
+                <option value="96.0">96 </option>
+                <option value="98.0">98 </option>
+            </select>
+            <label style="padding: 0px 0px 0px 190px;" for="occ" > Occupancy type</label>
+            <select id="occ" name="occupancy">
+                <option value="1.0">single family residence</option>
+                <option value="2.0">2 to 4 unit residential building</option>
+                <option value="3.0">residential building with more than 4 units</option>
+                <option value="4.0">Non-residential building</option>
+            </select>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;" for="postf"> Post FIRM Structure</label>
+            <select style="float:left;margin-left:3px;" id="postf" name="postfirm">
+                <option value="N">No</option>
+                <option value="Y">Yes</option>
+                <option value="UNK">Unknown</option>
+            </select>
+            <label style="padding: 0px 0px 0px 170px;" for="year" > Year Built</label>
+            <input autocomplete="off" autofocus name="yearbuilt" id="year" placeholder="2006" type="number" min="1899" max="2021" required/>
+        </div>
+        <p> </p>
+
+        <div>
+            <label style="float:left;"  for="damyear"> Year of Loss</label>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="damageyear" id="damyear" placeholder="2020" type="number" required/>
+
+            <label style="padding: 0px 0px 0px 145px;" for="zip"> ZIP Code</label>
+            <input autocomplete="off" autofocus name="zipcode" id="zip" placeholder="99714" type="number" required/>
+
+        </div>
+
+        <button class="btn btn-primary" type="submit">Enter</button>
+    </form>
+{% endblock %}
+
