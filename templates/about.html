@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    About
+{% endblock %}
+
+{% block main %}
+
+    <div align="justify">
+
+        This web-app is intended to help users (Individual home buyers or Insurance Companies) to better understand the risk of flooding of the property of interest.
+            Insurance companies can use this tool to accept/mitigate/ or avoid a risk. Home buyers can also decide whether to invest on a property or not.
+
+
+        Recently, federal emergency management agency (FEMA) published its flood claim experience data. The dataset represents more than
+        two million claim transactions from 1970 to 2019. FEMA flood claims data was preprocessed and used as the underlying data. Machine learning and deep learning techniques such as XGBRegressor, GradientBoostingRegressor, MLP, Ridge, and Random Forest Regressor were applied to find the best model that can predict the building loss ratio (amount of claim / insured value).
+        <p>
+        <br>
+            Based on the figure below from FEMA flood claims data, we can interpret that the flood insurance industry is constantly growing.
+
+            <img style="float:left;" src="static/Count_Year.png" >
+        </p>
+        <p>
+        Also, we can see an upward trend in the average loss ratio of claims over the year which means that the flood events are getting bigger which can be due to climate change.
+
+            <img style="float:left;" src="static/LR_Year.png" >
+
+
+        </p>
+    </div>
+    <div>
+        <p>
+        Below is the graph that shows the steps required to develop this web-app and the goal of this project.
+        </p>
+    <img style="float:left;" src="static/graph.png" >
+    </div>
+    <p align="justify">
+        The best results was achieved with the gradient boosting regressor with R2 score of 67% on the test data.
+    </p>
+    <p align="justify">
+        First user needs to create an account. Then the input information of the building is required. Once input information is entered, you will get to a page where you can see the map of property along with the predicted loss ratio and a box plot showing the historical claim information of the entered ZIP Code (if there be any.)
+    </p>
+    <p align="justify">
+        <br> By utilizing this web-app, flood insurance companies and people who are interested in buying a property can better evaluate the risk of
+        flooding for the structure. Insurance companies can leverage this tool to evaluate and decide if they want to:
+        <br>
+        <br>    1- Accept the risk.
+        <br>    2- Mitigate the risk by increasing the premiums.
+        <br>    3- Avoid writing the risk.
+    </p>
+    <p align="justify"
+        <br> Homeowners/homebuyers can also leverage this tool to decide whether they need to purchase flood insurance.
+        <br>
+
+    <br> There are many other attributes that can cause flooding. This tool only uses the historical claims data and doesn't guarantee
+        the results to be accurate. We do not take any responsibility regarding the outputs of this tool and how it will be used.
+        Please contact me at faraz.zorofchi@gmail.com if you have any questions regarding this project.
+    <div>
+        <a target="_blank" href="https://www.linkedin.com/in/faraz-h-zorofchi/">Linkedin profile</a>
+    </div>
+    </p>
+
+
+{% endblock %}
