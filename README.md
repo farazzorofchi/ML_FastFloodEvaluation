@@ -16,5 +16,5 @@ using historical claim data.
 
 There are many other attributes that can cause flooding. This tool only uses the historical claims data and doesn't guarantee
 the results to be accurate. We do not take any responsibility regarding the outputs of this tool and how it will be used.
-Please contact me at faraz.zorofchi@gmail.com if you have any questions regarding this project.
+Please contact faraz.zorofchi@gmail.com if you have any questions regarding this project.
  
