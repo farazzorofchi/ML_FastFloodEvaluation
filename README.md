@@ -3,7 +3,7 @@
 This web-app (https://fast-flood-eval.herokuapp.com/) is intended to help users (Individual home buyers or Insurance Companies) to better understand the risk of flooding of the property of interest. Insurance companies can use this tool to accept/mitigate/ or avoid a risk. Home buyers can also decide whether to invest on a property or not.
 
 Recently, federal emergency management agency (FEMA) published its flood claim experience data. The dataset represents more than
-two million claim transactions from 1970 to 2019. FEMA flood claims data was preprocessed and used as the underlying data. Machine learning and deep learning techniques such as XGBRegressor, GradientBoostingRegressor, MLP, Ridge, and Random Forest Regressor were applied to find the best model that can predict the building loss ratio (amount of claim / insured value).
+two million claim transactions from 1970 to 2019. ([https://www.fema.gov/openfema-data-page/fima-nfip-redacted-claims](https://www.fema.gov/openfema-data-page/fima-nfip-redacted-claims)) FEMA flood claims data was preprocessed and used as the underlying data. Machine learning and deep learning techniques such as XGBRegressor, GradientBoostingRegressor, MLP, Ridge, and Random Forest Regressor were applied to find the best model that can predict the building loss ratio (amount of claim / insured value).
 
 in order to provide a sound approach to quantify the loss ratio (loss / insured value) of buildings with different attributes
 using historical claim data.
