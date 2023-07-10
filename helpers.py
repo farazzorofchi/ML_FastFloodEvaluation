@@ -1,9 +1,9 @@
 import os
 import requests
 import urllib.parse
-
-from flask import redirect, render_template, request, session
 from functools import wraps
+
+from flask import redirect, render_template, session
 
 
 def apology(message, code=400):
@@ -14,8 +14,10 @@ def apology(message, code=400):
 
         https://github.com/jacebrowning/memegen#special-characters
         """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
+        for old, new in [
+            ("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
+            ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")
+        ]:
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
@@ -41,7 +43,10 @@ def lookup(symbol):
     # Contact API
     try:
         api_key = os.environ.get("API_KEY")
-        response = requests.get(f"https://cloud-sse.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={api_key}")
+        response = requests.get(
+            f"https://cloud-sse.iexapis.com/stable/stock/" +
+            f"{urllib.parse.quote_plus(symbol)}/quote?token={api_key}"
+        )
         response.raise_for_status()
     except requests.RequestException:
         return None

@@ -1,17 +1,32 @@
-import pandas as pd
-import numpy as np
 import random
 
-data = pd.read_csv('openFEMA_claims20190831.csv')
+import pandas as pd
+import numpy as np
 
-data['amountpaidonincreasedcostofcomplianceclaim'] = data['amountpaidonincreasedcostofcomplianceclaim'].fillna(0)
+
+data = pd.read_csv('openFEMA_claims20190831.csv')
+data['amountpaidonincreasedcostofcomplianceclaim'] = (
+    data['amountpaidonincreasedcostofcomplianceclaim'].fillna(0)
+)
 data['amountpaidonbuildingclaim'] = data['amountpaidonbuildingclaim'].fillna(0)
 data['amountpaidoncontentsclaim'] = data['amountpaidoncontentsclaim'].fillna(0)
-data['TIV'] = data['totalbuildinginsurancecoverage']+data['totalcontentsinsurancecoverage']
-data['LOSS'] = data['amountpaidonbuildingclaim']+data['amountpaidoncontentsclaim']
-data['loss_ratio_building'] = data['amountpaidonbuildingclaim']/data['totalbuildinginsurancecoverage']
-data['loss_ratio_content'] = data['amountpaidoncontentsclaim']/data['totalcontentsinsurancecoverage']
-data['loss_ratio_overall'] = data['LOSS']/data['TIV']
+data['TIV'] = (
+    data['totalbuildinginsurancecoverage'] +
+    data['totalcontentsinsurancecoverage']
+)
+data['LOSS'] = (
+    data['amountpaidonbuildingclaim'] +
+    data['amountpaidoncontentsclaim']
+)
+data['loss_ratio_building'] = (
+    data['amountpaidonbuildingclaim'] /
+    data['totalbuildinginsurancecoverage']
+)
+data['loss_ratio_content'] = (
+    data['amountpaidoncontentsclaim'] /
+    data['totalcontentsinsurancecoverage']
+)
+data['loss_ratio_overall'] = data['LOSS'] / data['TIV']
 
 # Keep only year for year built of the building
 yearbuilt = []
@@ -20,7 +35,6 @@ for i in range(0, len(data)):
         yearbuilt.append(int(data['originalconstructiondate'][i][:4]))
     except:
         yearbuilt.append(random.randint(1970, 2019))
-
 data['yearbuilt'] = yearbuilt
 
 # Generalize Flood Zones:
@@ -59,12 +73,10 @@ for i in range(0, len(data)):
             FloodZone.append('UNK')
     except:
         FloodZone.append('UNK')
-
 data['floodzone'] = FloodZone
 
-
 zipcode = []
-for i in range(0,len(data)):
+for i in range(0, len(data)):
     try:
         if int(data['reportedzipcode'][i]) > 100:
             zipcode.append(int(data['reportedzipcode'][i]))
@@ -74,13 +86,18 @@ for i in range(0,len(data)):
         zipcode.append(-999999)
 data['ZipCode'] = zipcode
 
-for i in range(0,len(data)):
-    if (not np.isnan(data['lowestfloorelevation'][i])) & (not np.isnan(data['basefloodelevation'][i])):
-        data['elevationdifference'][i] = data['lowestfloorelevation'][i] - data['basefloodelevation'][i]
+for i in range(0, len(data)):
+    if (
+        (not np.isnan(data['lowestfloorelevation'][i])) &
+        (not np.isnan(data['basefloodelevation'][i]))
+    ):
+        data['elevationdifference'][i] = (
+            data['lowestfloorelevation'][i] -
+            data['basefloodelevation'][i]
+        )
 
 data = data[data['elevationdifference'] != 999]
 data.reset_index(drop=True, inplace=True)
-
 data.drop('asofdate', axis=1, inplace=True)
 data.drop('countycode', axis=1, inplace=True)
 data.drop('censustract', axis=1, inplace=True)
@@ -98,28 +115,27 @@ data.drop('smallbusinessindicatorbuilding', axis=1, inplace=True)
 data.drop('state', axis=1, inplace=True)
 data.drop('reportedzipcode', axis=1, inplace=True)
 data.drop('primaryresidence', axis=1, inplace=True)
-
 print('len(data) before cleaning =', len(data))
 
 delete_row = data[np.isnan(data['latitude'])].index
 data = data.drop(delete_row)
-
 delete_row = data[np.isnan(data['longitude'])].index
 data = data.drop(delete_row)
-
 delete_row = data[np.isnan(data['numberoffloorsintheinsuredbuilding'])].index
 data = data.drop(delete_row)
 
-#Keeping only up to 30 feet difference
-data = data[(data['elevationdifference'] <= 30) & (data['elevationdifference'] >= -30) ]
-
+# Keeping only up to 30 feet difference
+data = data[
+    (data['elevationdifference'] <= 30) &
+    (data['elevationdifference'] >= -30)
+]
 data = data[data['yearbuilt'] >= 1800]
 data = data[data['nonprofitindicator'] != '0']
 data = data[data['ZipCode'] != -999999]
 data = data[data['TIV'] != 0]
 data = data[data['obstructiontype'] != '*']
 data['obstructiontype'] = pd.to_numeric(data['obstructiontype'])
-data['obstructiontype']= data['obstructiontype'].astype(str)
+data['obstructiontype'] = data['obstructiontype'].astype(str)
 data['obstructiontype'].fillna('UNK', inplace=True)
 data['obstructiontype'][data['obstructiontype'] == 'nan'] = 'UNK'
 data['agriculturestructureindicator'].fillna('N', inplace=True)
