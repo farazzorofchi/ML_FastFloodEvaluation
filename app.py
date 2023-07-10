@@ -49,88 +49,7 @@ def index():
 @login_required
 def input():
     if request.method == "POST":
-        db.execute(
-            """
-            INSERT INTO address (
-                uid, 
-                agr, 
-                basement, 
-                condo, 
-                policycount, 
-                crsdiscount, 
-                elevatedbuilding, 
-                elevationdifference, 
-                floodzone, 
-                houseworship, 
-                locationofcontents, 
-                latitude, 
-                longitude, 
-                numstories, 
-                nonprofit, 
-                obstructiontype, 
-                occupancytype, 
-                postfirm, 
-                yearbuilt, 
-                zipcode, 
-                yearofloss
-            ) 
-            VALUES (
-                :user_id, 
-                :agriculture, 
-                :basement, 
-                :condominium, 
-                :policycount, 
-                :crsdiscount, 
-                :elevatedbuilding, 
-                :elevationdifference, 
-                :floodzone, 
-                :houseworship, 
-                :locationofcontents, 
-                :latitude, 
-                :longitude, 
-                :numstories, 
-                :nonprofit, 
-                :obstructiontype, 
-                :occupancytype, 
-                :postfirm, 
-                :yearbuilt, 
-                :zipcode, 
-                :yearofloss
-            )
-            """,
-            user_id=session["user_id"],
-            agriculture=request.form.get("agriculture"),
-            basement=request.form.get("basement"),
-            condominium=request.form.get("condominium"),
-            policycount=request.form.get("policycount"),
-            crsdiscount=request.form.get("crsdiscount"),
-            elevatedbuilding=request.form.get("elevatedbuilding"),
-            elevationdifference=request.form.get("elevationdifference"),
-            floodzone=request.form.get("floodzone"),
-            houseworship=request.form.get("houseworship"),
-            locationofcontents=request.form.get("locationofcontents"),
-            latitude=request.form.get("latitude"),
-            longitude=request.form.get("longitude"),
-            numstories=request.form.get("numberofstories"),
-            nonprofit=request.form.get("nonprofit"),
-            obstructiontype=request.form.get("obstruction"),
-            occupancytype=request.form.get("occupancy"),
-            postfirm=request.form.get("postfirm"),
-            yearbuilt=request.form.get("yearbuilt"),
-            zipcode=request.form.get("zipcode"),
-            yearofloss=request.form.get("damageyear")
-        )
-        db.execute(
-            """
-            UPDATE accounts 
-            SET numaddresses = numaddresses + 1 
-            WHERE uid = :user_id
-            """,
-            user_id=session["user_id"]
-        )
-        flash("Location Added!")
-
-        # Calculate Loss Ratio and Update db
+        # Calculate Loss Ratio and insert to DB
         zip_temp = zip_agg[
             zip_agg['ZipCode'] == int(request.form.get("zipcode"))
         ]
@@ -214,32 +133,55 @@ def input():
 
         db.execute(
             """
-            UPDATE address 
-            SET lossratio = :lossratio 
-            WHERE 
-                uid = :user_id 
-                AND agr = :agriculture 
-                AND basement = :basement 
-                AND condo = :condominium 
-                AND policycount = :policycount 
-                AND crsdiscount = :crsdiscount 
-                AND latitude = :latitude 
-                AND longitude = :longitude 
-                AND zipcode = :zipcode 
-                AND yearbuilt = :yearbuilt 
-                AND postfirm = :postfirm 
-                AND occupancytype = :occupancytype 
-                AND obstructiontype = :obstructiontype 
-                AND nonprofit = :nonprofit 
-                AND numstories = :numstories 
-                AND locationofcontents = :locationofcontents 
-                AND houseworship = :houseworship 
-                AND floodzone = :floodzone 
-                AND elevationdifference = :elevationdifference 
-                AND elevatedbuilding = :elevatedbuilding 
-                AND yearofloss = :yearofloss
+            INSERT INTO address (
+                uid, 
+                agr, 
+                basement, 
+                condo, 
+                policycount, 
+                crsdiscount, 
+                elevatedbuilding, 
+                elevationdifference, 
+                floodzone, 
+                houseworship, 
+                locationofcontents, 
+                latitude, 
+                longitude, 
+                numstories, 
+                nonprofit, 
+                obstructiontype, 
+                occupancytype, 
+                postfirm, 
+                yearbuilt, 
+                zipcode, 
+                yearofloss,
+                lossratio
+            ) 
+            VALUES (
+                :user_id, 
+                :agriculture, 
+                :basement, 
+                :condominium, 
+                :policycount, 
+                :crsdiscount, 
+                :elevatedbuilding, 
+                :elevationdifference, 
+                :floodzone, 
+                :houseworship, 
+                :locationofcontents, 
+                :latitude, 
+                :longitude, 
+                :numstories, 
+                :nonprofit, 
+                :obstructiontype, 
+                :occupancytype, 
+                :postfirm, 
+                :yearbuilt, 
+                :zipcode, 
+                :yearofloss,
+                :lossratio
+            )
             """,
-            lossratio=LR,
             user_id=session["user_id"],
             agriculture=request.form.get("agriculture"),
             basement=request.form.get("basement"),
@@ -260,8 +202,18 @@ def input():
             postfirm=request.form.get("postfirm"),
             yearbuilt=request.form.get("yearbuilt"),
             zipcode=request.form.get("zipcode"),
-            yearofloss=request.form.get("damageyear")
+            yearofloss=request.form.get("damageyear"),
+            lossratio=LR
         )
+        db.execute(
+            """
+            UPDATE accounts 
+            SET numaddresses = numaddresses + 1 
+            WHERE uid = :user_id
+            """,
+            user_id=session["user_id"]
+        )
+        flash("Location Added!")
 
         if LR <= 0.05:
             col = "green"
