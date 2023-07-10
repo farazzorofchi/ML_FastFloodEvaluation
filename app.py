@@ -51,10 +51,52 @@ def input():
     if request.method == "POST":
         db.execute(
             """
-            INSERT INTO 
-                address (uid, agr, basement, condo, policycount, crsdiscount, elevatedbuilding, elevationdifference, floodzone, houseworship, locationofcontents, latitude, longitude, numstories, nonprofit, obstructiontype, occupancytype, postfirm, yearbuilt, zipcode, yearofloss) 
-            VALUES
-                (:user_id, :agriculture, :basement, :condominium, :policycount, :crsdiscount, :elevatedbuilding,:elevationdifference, :floodzone, :houseworship, :locationofcontents, :latitude, :longitude, :numstories, :nonprofit, :obstructiontype, :occupancytype, :postfirm, :yearbuilt, :zipcode, :yearofloss)
+            INSERT INTO address (
+                uid, 
+                agr, 
+                basement, 
+                condo, 
+                policycount, 
+                crsdiscount, 
+                elevatedbuilding, 
+                elevationdifference, 
+                floodzone, 
+                houseworship, 
+                locationofcontents, 
+                latitude, 
+                longitude, 
+                numstories, 
+                nonprofit, 
+                obstructiontype, 
+                occupancytype, 
+                postfirm, 
+                yearbuilt, 
+                zipcode, 
+                yearofloss
+            ) 
+            VALUES (
+                :user_id, 
+                :agriculture, 
+                :basement, 
+                :condominium, 
+                :policycount, 
+                :crsdiscount, 
+                :elevatedbuilding, 
+                :elevationdifference, 
+                :floodzone, 
+                :houseworship, 
+                :locationofcontents, 
+                :latitude, 
+                :longitude, 
+                :numstories, 
+                :nonprofit, 
+                :obstructiontype, 
+                :occupancytype, 
+                :postfirm, 
+                :yearbuilt, 
+                :zipcode, 
+                :yearofloss
+            )
             """,
             user_id=session["user_id"],
             agriculture=request.form.get("agriculture"),
