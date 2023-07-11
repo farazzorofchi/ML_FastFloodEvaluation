@@ -57,10 +57,10 @@ def input():
         min_LR = round(zip_temp['loss_ratio_building'].min(), 2)
         max_LR = round(zip_temp['loss_ratio_building'].max(), 2)
         mean_LR = round(zip_temp['loss_ratio_building'].mean(), 2)
-        zip_URL = ''
 
         if len_zip > 1:
             len_image = True
+            zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
             ax = sns.boxplot(
                 x="ZipCode",
                 y="loss_ratio_building",
@@ -73,63 +73,51 @@ def input():
             ax.set_ylabel('Building Loss Ratio')
             fig = ax.get_figure()
             fig.set_size_inches(4.5, 5)
-            fig.savefig('static/%s.png' % int(request.form.get("zipcode")))
-            zip_URL = "static/%s.png" % int(request.form.get("zipcode"))
+            fig.savefig(zip_URL)
             plt.close(fig)
         else:
             len_image = False
+            zip_URL = ''
 
-        agriculturestructureindicator_input = request.form.get("agriculture")
-        basementenclosurecrawlspacetype_input = float(
-            request.form.get("basement")
+        df = (
+            pd
+            .DataFrame({
+                'agriculturestructureindicator': [request.form.get("agriculture")],
+                'basementenclosurecrawlspacetype': [request.form.get("basement")],
+                'condominiumindicator': [request.form.get("condominium")],
+                'policycount': [request.form.get("policycount")],
+                'crsdiscount': [request.form.get("crsdiscount")],
+                'elevatedbuildingindicator': [request.form.get("elevatedbuilding")],
+                'elevationdifference': [request.form.get("elevationdifference")],
+                'floodzone': [request.form.get("floodzone")],
+                'houseworship': [request.form.get("houseworship")],
+                'latitude': [request.form.get("latitude")],
+                'locationofcontents': [request.form.get("locationofcontents")],
+                'longitude': [request.form.get("longitude")],
+                'numberoffloorsintheinsuredbuilding': [request.form.get("numberofstories")],
+                'nonprofitindicator': [request.form.get("nonprofit")],
+                'obstructiontype': [request.form.get("obstruction")],
+                'occupancytype': [request.form.get("occupancy")],
+                'postfirmconstructionindicator': [request.form.get("postfirm")],
+                'yearofloss': [request.form.get("damageyear")],
+                'yearbuilt': [request.form.get("yearbuilt")],
+                'ZipCode': [request.form.get("zipcode")]
+            })
+            .astype({
+                'basementenclosurecrawlspacetype': 'float',
+                'policycount': 'float',
+                'crsdiscount': 'float',
+                'elevationdifference': 'float',
+                'latitude': 'float',
+                'longitude': 'float',
+                'numberoffloorsintheinsuredbuilding': 'float',
+                'occupancytype': 'float',
+                'yearofloss': 'int',
+                'yearbuilt': 'int',
+                'ZipCode': 'int',
+            })
         )
-        condominiumindicator_input = request.form.get("condominium")
-        policycount_input = float(request.form.get("policycount"))
-        crsdiscount_input = float(request.form.get("crsdiscount"))
-        elevatedbuildingindicator_input = request.form.get("elevatedbuilding")
-        elevationdifference_input = float(
-            request.form.get("elevationdifference")
-        )
-        floodzone_input = request.form.get("floodzone")
-        houseworship_input = request.form.get("houseworship")
-        latitude_input = float(request.form.get("latitude"))
-        locationofcontents_input = request.form.get("locationofcontents")
-        longitude_input = float(request.form.get("longitude"))
-        numberoffloorsintheinsuredbuilding_input = float(
-            request.form.get("numberofstories")
-        )
-        nonprofitindicator_input = request.form.get("nonprofit")
-        obstructiontype_input = request.form.get("obstruction")
-        occupancytype_input = float(request.form.get("occupancy"))
-        postfirmconstructionindicator_input = request.form.get("postfirm")
-        yearofloss_input = int(request.form.get("damageyear"))
-        yearbuilt_input = int(request.form.get("yearbuilt"))
-        ZipCode_input = int(request.form.get("zipcode"))
-
-        df = pd.DataFrame({
-            'agriculturestructureindicator': [agriculturestructureindicator_input],
-            'basementenclosurecrawlspacetype': [basementenclosurecrawlspacetype_input],
-            'condominiumindicator': [condominiumindicator_input],
-            'policycount': [policycount_input],
-            'crsdiscount': [crsdiscount_input],
-            'elevatedbuildingindicator': [elevatedbuildingindicator_input],
-            'elevationdifference': [elevationdifference_input],
-            'floodzone': [floodzone_input],
-            'houseworship': [houseworship_input],
-            'latitude': [latitude_input],
-            'locationofcontents': [locationofcontents_input],
-            'longitude': [longitude_input],
-            'numberoffloorsintheinsuredbuilding': [numberoffloorsintheinsuredbuilding_input],
-            'nonprofitindicator': [nonprofitindicator_input],
-            'obstructiontype': [obstructiontype_input],
-            'occupancytype': [occupancytype_input],
-            'postfirmconstructionindicator': [postfirmconstructionindicator_input],
-            'yearofloss': [yearofloss_input],
-            'yearbuilt': [yearbuilt_input],
-            'ZipCode': [ZipCode_input]
-        })
-        LR = str(round(loaded_model.predict(df)[0], 2))
-        LR = float(LR)
+        LR = float(round(loaded_model.predict(df)[0], 2))
 
         db.execute(
             """
@@ -222,7 +210,20 @@ def input():
         elif LR > 0.2:
             col = "red"
 
-        return render_template("my_map.html", lat=request.form.get("latitude"), lon=request.form.get("longitude"), col=col, LR=LR, len_image=len_image, zip_URL=zip_URL, min_LR=min_LR, max_LR=max_LR, mean_LR=mean_LR, len_zip=len_zip, zip=request.form.get("zipcode"))
+        return render_template(
+            "my_map.html",
+            lat=request.form.get("latitude"),
+            lon=request.form.get("longitude"),
+            col=col,
+            LR=LR,
+            len_image=len_image,
+            zip_URL=zip_URL,
+            min_LR=min_LR,
+            max_LR=max_LR,
+            mean_LR=mean_LR,
+            len_zip=len_zip,
+            zip=request.form.get("zipcode")
+        )
 
     else:
         return render_template("input.html")
