@@ -54,30 +54,7 @@ def input():
         zip_temp = zip_agg[
             zip_agg['ZipCode'] == int(request.form.get("zipcode"))
         ]
-        len_zip = len(zip_temp)
-        min_LR = round(zip_temp['loss_ratio_building'].min(), 2)
-        max_LR = round(zip_temp['loss_ratio_building'].max(), 2)
-        mean_LR = round(zip_temp['loss_ratio_building'].mean(), 2)
-        if not len_zip > 1:
-            len_image = False
-            zip_URL = ""
-        else:
-            len_image = True
-            zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
-            ax = sns.boxplot(
-                x="ZipCode",
-                y="loss_ratio_building",
-                palette=["r", "g"],
-                data=zip_agg[
-                    zip_agg['ZipCode'] == int(request.form.get("zipcode"))
-                ]
-            )
-            ax.set_xlabel('Zip Code')
-            ax.set_ylabel('Building Loss Ratio')
-            fig = ax.get_figure()
-            fig.set_size_inches(4.5, 5)
-            fig.savefig(zip_URL)
-            plt.close(fig)
+        zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
         df = (
             pd
             .DataFrame({
@@ -206,18 +183,34 @@ def input():
             user_id=session["user_id"]
         )
         flash("Location Added!")
+        ax = (
+            sns.boxplot()
+            if zip_temp.empty else
+            sns.boxplot(
+                x="ZipCode",
+                y="loss_ratio_building",
+                palette=["r", "g"],
+                data=zip_temp
+            )
+        )
+        ax.set_xlabel('Zip Code')
+        ax.set_ylabel('Building Loss Ratio')
+        fig = ax.get_figure()
+        fig.set_size_inches(4.5, 5)
+        fig.savefig(zip_URL)
+        plt.close(fig)
         return render_template(
             "my_map.html",
             lat=request.form.get("latitude"),
             lon=request.form.get("longitude"),
             col=col,
             LR=LR,
-            len_image=len_image,
+            len_image=True if ax.lines else False,
             zip_URL=zip_URL,
-            min_LR=min_LR,
-            max_LR=max_LR,
-            mean_LR=mean_LR,
-            len_zip=len_zip,
+            min_LR=round(zip_temp['loss_ratio_building'].min(), 2),
+            max_LR=round(zip_temp['loss_ratio_building'].max(), 2),
+            mean_LR=round(zip_temp['loss_ratio_building'].mean(), 2),
+            len_zip=len(zip_temp),
             zip=request.form.get("zipcode")
         )
 
