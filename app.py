@@ -228,27 +228,26 @@ def login():
     if not request.method == "POST":
         return render_template("login.html")
     else:
+        potential_user = db.execute(
+            """
+            SELECT * 
+            FROM accounts 
+            WHERE username = :username
+            """,
+            username=request.form.get("username")
+        )
+        user = next(iter(potential_user), {})
         if not request.form.get("username"):
             return apology("must provide username", 403)
         elif not request.form.get("password"):
             return apology("must provide password", 403)
+        elif not user:
+            return apology("username does not exist", 403)
+        elif not check_password_hash(user["hash"], request.form.get("password")):
+            return apology("password does not match", 403)
         else:
-            rows = db.execute(
-                """
-                SELECT * 
-                FROM accounts 
-                WHERE username = :username
-                """,
-                username=request.form.get("username")
-            )
-            if (
-                (len(rows) != 1) or 
-                (not check_password_hash(rows[0]["hash"], request.form.get("password")))
-            ):
-                return apology("invalid username and/or password", 403)
-            else:
-                session["user_id"] = rows[0]["uid"]
-                return render_template("input.html")
+            session["user_id"] = user["uid"]
+            return render_template("input.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -256,36 +255,36 @@ def register():
     if not request.method == "POST":
         return render_template("register.html")    
     else:
+        potential_user = db.execute(
+            """
+            SELECT * 
+            FROM accounts 
+            WHERE username = :username
+            """,
+            username=request.form.get("username")
+        )            
+        user = next(iter(potential_user), {})
         if not request.form.get("username"):
-            return apology("Must provide username", 400)
+            return apology("must provide username", 400)
         elif not request.form.get("password"):
-            return apology("Must provide password", 400)
+            return apology("must provide password", 400)
         elif request.form.get("password") != request.form.get("confirmation"):
-            return apology("Password do not match", 400)
+            return apology("passwords do not match", 400)
+        elif user:
+            return apology("username already taken", 400)
         else:
             hash = generate_password_hash(request.form.get("password"))
-            check_user_id = db.execute(
+            new_user_id = db.execute(
                 """
-                SELECT * 
-                FROM accounts 
-                WHERE username = :username
+                INSERT INTO accounts (username, hash) 
+                VALUES (:username, :hash)
                 """,
-                username=request.form.get("username")
-            )            
-            if len(check_user_id) >= 1:
-                return apology("username taken", 400)
-            else:
-                new_user_id = db.execute(
-                    """
-                    INSERT INTO accounts (username, hash) 
-                    VALUES (:username, :hash)
-                    """,
-                    username=request.form.get("username"),
-                    hash=hash
-                )
-                session["user_id"] = new_user_id
-                flash("Registered")
-                return render_template("input.html")
+                username=request.form.get("username"),
+                hash=hash
+            )
+            session["user_id"] = new_user_id
+            flash("Registered")
+            return render_template("input.html")
 
 
 @app.route("/logout")
