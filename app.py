@@ -48,8 +48,9 @@ def index():
 @app.route("/input", methods=["GET", "POST"])
 @login_required
 def input():
-    if request.method == "POST":
-        # Calculate Loss Ratio and insert to DB
+    if not request.method == "POST":
+        return render_template("input.html")
+    else:
         zip_temp = zip_agg[
             zip_agg['ZipCode'] == int(request.form.get("zipcode"))
         ]
@@ -57,8 +58,10 @@ def input():
         min_LR = round(zip_temp['loss_ratio_building'].min(), 2)
         max_LR = round(zip_temp['loss_ratio_building'].max(), 2)
         mean_LR = round(zip_temp['loss_ratio_building'].mean(), 2)
-
-        if len_zip > 1:
+        if not len_zip > 1:
+            len_image = False
+            zip_URL = ""
+        else:
             len_image = True
             zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
             ax = sns.boxplot(
@@ -75,10 +78,6 @@ def input():
             fig.set_size_inches(4.5, 5)
             fig.savefig(zip_URL)
             plt.close(fig)
-        else:
-            len_image = False
-            zip_URL = ''
-
         df = (
             pd
             .DataFrame({
@@ -118,7 +117,12 @@ def input():
             })
         )
         LR = float(round(loaded_model.predict(df)[0], 2))
-
+        if LR <= 0.05:
+            col = "green"
+        elif (LR > 0.05) and (LR <= 0.2):
+            col = "yellow"
+        else:
+            col = "red"
         db.execute(
             """
             INSERT INTO address (
@@ -202,14 +206,6 @@ def input():
             user_id=session["user_id"]
         )
         flash("Location Added!")
-
-        if LR <= 0.05:
-            col = "green"
-        elif (LR > 0.05) and (LR <= 0.2):
-            col = "yellow"
-        elif LR > 0.2:
-            col = "red"
-
         return render_template(
             "my_map.html",
             lat=request.form.get("latitude"),
@@ -225,97 +221,76 @@ def input():
             zip=request.form.get("zipcode")
         )
 
-    else:
-        return render_template("input.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # Forget any user_id
     session.clear()
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        # Ensure username was submitted
+    if not request.method == "POST":
+        return render_template("login.html")
+    else:
         if not request.form.get("username"):
             return apology("must provide username", 403)
-
-        # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
-
-        # Query database for username
-        rows = db.execute(
-            """
-            SELECT * 
-            FROM accounts 
-            WHERE username = :username
-            """,
-            username=request.form.get("username")
-        )
-
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
-
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["uid"]
-
-        # Redirect user to home page
-        return render_template("input.html")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html")
+        else:
+            rows = db.execute(
+                """
+                SELECT * 
+                FROM accounts 
+                WHERE username = :username
+                """,
+                username=request.form.get("username")
+            )
+            if (
+                (len(rows) != 1) or 
+                (not check_password_hash(rows[0]["hash"], request.form.get("password")))
+            ):
+                return apology("invalid username and/or password", 403)
+            else:
+                session["user_id"] = rows[0]["uid"]
+                return render_template("input.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-
+    if not request.method == "POST":
+        return render_template("register.html")    
+    else:
         if not request.form.get("username"):
             return apology("Must provide username", 400)
         elif not request.form.get("password"):
             return apology("Must provide password", 400)
         elif request.form.get("password") != request.form.get("confirmation"):
             return apology("Password do not match", 400)
-
-        hash = generate_password_hash(request.form.get("password"))
-
-        check_user_id = db.execute(
-            """
-            SELECT * 
-            FROM accounts 
-            WHERE username = :username
-            """,
-            username=request.form.get("username"))
-
-        if len(check_user_id) >= 1:
-            return apology("username taken", 400)
-
-        new_user_id = db.execute(
-            """
-            INSERT INTO accounts (username, hash) 
-            VALUES (:username, :hash)
-            """,
-            username=request.form.get("username"),
-            hash=hash
-        )
-        session["user_id"] = new_user_id
-        flash("Registered")
-
-        return render_template("input.html")
-
-    else:
-        return render_template("register.html")
+        else:
+            hash = generate_password_hash(request.form.get("password"))
+            check_user_id = db.execute(
+                """
+                SELECT * 
+                FROM accounts 
+                WHERE username = :username
+                """,
+                username=request.form.get("username")
+            )            
+            if len(check_user_id) >= 1:
+                return apology("username taken", 400)
+            else:
+                new_user_id = db.execute(
+                    """
+                    INSERT INTO accounts (username, hash) 
+                    VALUES (:username, :hash)
+                    """,
+                    username=request.form.get("username"),
+                    hash=hash
+                )
+                session["user_id"] = new_user_id
+                flash("Registered")
+                return render_template("input.html")
 
 
 @app.route("/logout")
 def logout():
-    # Forget any user_id
     session.clear()
-    # Redirect user to login form
     return redirect("/")
 
 
@@ -355,8 +330,7 @@ def history():
             user_id=session["user_id"]
         )
         return render_template("history.html", transactions=transactions)
-
-    elif request.method == "POST":
+    else:
         db.execute(
             """
             DELETE 
