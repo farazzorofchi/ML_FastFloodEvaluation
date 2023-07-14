@@ -48,89 +48,58 @@ def index():
 @app.route("/input", methods=["GET", "POST"])
 @login_required
 def input():
-    if request.method == "POST":
-        # Calculate Loss Ratio and insert to DB
+    if not request.method == "POST":
+        return render_template("input.html")
+    else:
         zip_temp = zip_agg[
             zip_agg['ZipCode'] == int(request.form.get("zipcode"))
         ]
-        len_zip = len(zip_temp)
-        min_LR = round(zip_temp['loss_ratio_building'].min(), 2)
-        max_LR = round(zip_temp['loss_ratio_building'].max(), 2)
-        mean_LR = round(zip_temp['loss_ratio_building'].mean(), 2)
-        zip_URL = ''
-
-        if len_zip > 1:
-            len_image = True
-            ax = sns.boxplot(
-                x="ZipCode",
-                y="loss_ratio_building",
-                palette=["r", "g"],
-                data=zip_agg[
-                    zip_agg['ZipCode'] == int(request.form.get("zipcode"))
-                ]
-            )
-            ax.set_xlabel('Zip Code')
-            ax.set_ylabel('Building Loss Ratio')
-            fig = ax.get_figure()
-            fig.set_size_inches(4.5, 5)
-            fig.savefig('static/%s.png' % int(request.form.get("zipcode")))
-            zip_URL = "static/%s.png" % int(request.form.get("zipcode"))
-            plt.close(fig)
+        zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
+        df = (
+            pd
+            .DataFrame({
+                'agriculturestructureindicator': [request.form.get("agriculture")],
+                'basementenclosurecrawlspacetype': [request.form.get("basement")],
+                'condominiumindicator': [request.form.get("condominium")],
+                'policycount': [request.form.get("policycount")],
+                'crsdiscount': [request.form.get("crsdiscount")],
+                'elevatedbuildingindicator': [request.form.get("elevatedbuilding")],
+                'elevationdifference': [request.form.get("elevationdifference")],
+                'floodzone': [request.form.get("floodzone")],
+                'houseworship': [request.form.get("houseworship")],
+                'latitude': [request.form.get("latitude")],
+                'locationofcontents': [request.form.get("locationofcontents")],
+                'longitude': [request.form.get("longitude")],
+                'numberoffloorsintheinsuredbuilding': [request.form.get("numberofstories")],
+                'nonprofitindicator': [request.form.get("nonprofit")],
+                'obstructiontype': [request.form.get("obstruction")],
+                'occupancytype': [request.form.get("occupancy")],
+                'postfirmconstructionindicator': [request.form.get("postfirm")],
+                'yearofloss': [request.form.get("damageyear")],
+                'yearbuilt': [request.form.get("yearbuilt")],
+                'ZipCode': [request.form.get("zipcode")]
+            })
+            .astype({
+                'basementenclosurecrawlspacetype': 'float',
+                'policycount': 'float',
+                'crsdiscount': 'float',
+                'elevationdifference': 'float',
+                'latitude': 'float',
+                'longitude': 'float',
+                'numberoffloorsintheinsuredbuilding': 'float',
+                'occupancytype': 'float',
+                'yearofloss': 'int',
+                'yearbuilt': 'int',
+                'ZipCode': 'int',
+            })
+        )
+        LR = float(round(loaded_model.predict(df)[0], 2))
+        if LR <= 0.05:
+            col = "green"
+        elif (LR > 0.05) and (LR <= 0.2):
+            col = "yellow"
         else:
-            len_image = False
-
-        agriculturestructureindicator_input = request.form.get("agriculture")
-        basementenclosurecrawlspacetype_input = float(
-            request.form.get("basement")
-        )
-        condominiumindicator_input = request.form.get("condominium")
-        policycount_input = float(request.form.get("policycount"))
-        crsdiscount_input = float(request.form.get("crsdiscount"))
-        elevatedbuildingindicator_input = request.form.get("elevatedbuilding")
-        elevationdifference_input = float(
-            request.form.get("elevationdifference")
-        )
-        floodzone_input = request.form.get("floodzone")
-        houseworship_input = request.form.get("houseworship")
-        latitude_input = float(request.form.get("latitude"))
-        locationofcontents_input = request.form.get("locationofcontents")
-        longitude_input = float(request.form.get("longitude"))
-        numberoffloorsintheinsuredbuilding_input = float(
-            request.form.get("numberofstories")
-        )
-        nonprofitindicator_input = request.form.get("nonprofit")
-        obstructiontype_input = request.form.get("obstruction")
-        occupancytype_input = float(request.form.get("occupancy"))
-        postfirmconstructionindicator_input = request.form.get("postfirm")
-        yearofloss_input = int(request.form.get("damageyear"))
-        yearbuilt_input = int(request.form.get("yearbuilt"))
-        ZipCode_input = int(request.form.get("zipcode"))
-
-        df = pd.DataFrame({
-            'agriculturestructureindicator': [agriculturestructureindicator_input],
-            'basementenclosurecrawlspacetype': [basementenclosurecrawlspacetype_input],
-            'condominiumindicator': [condominiumindicator_input],
-            'policycount': [policycount_input],
-            'crsdiscount': [crsdiscount_input],
-            'elevatedbuildingindicator': [elevatedbuildingindicator_input],
-            'elevationdifference': [elevationdifference_input],
-            'floodzone': [floodzone_input],
-            'houseworship': [houseworship_input],
-            'latitude': [latitude_input],
-            'locationofcontents': [locationofcontents_input],
-            'longitude': [longitude_input],
-            'numberoffloorsintheinsuredbuilding': [numberoffloorsintheinsuredbuilding_input],
-            'nonprofitindicator': [nonprofitindicator_input],
-            'obstructiontype': [obstructiontype_input],
-            'occupancytype': [occupancytype_input],
-            'postfirmconstructionindicator': [postfirmconstructionindicator_input],
-            'yearofloss': [yearofloss_input],
-            'yearbuilt': [yearbuilt_input],
-            'ZipCode': [ZipCode_input]
-        })
-        LR = str(round(loaded_model.predict(df)[0], 2))
-        LR = float(LR)
-
+            col = "red"
         db.execute(
             """
             INSERT INTO address (
@@ -214,38 +183,45 @@ def input():
             user_id=session["user_id"]
         )
         flash("Location Added!")
-
-        if LR <= 0.05:
-            col = "green"
-        elif (LR > 0.05) and (LR <= 0.2):
-            col = "yellow"
-        elif LR > 0.2:
-            col = "red"
-
-        return render_template("my_map.html", lat=request.form.get("latitude"), lon=request.form.get("longitude"), col=col, LR=LR, len_image=len_image, zip_URL=zip_URL, min_LR=min_LR, max_LR=max_LR, mean_LR=mean_LR, len_zip=len_zip, zip=request.form.get("zipcode"))
-
-    else:
-        return render_template("input.html")
+        ax = (
+            sns.boxplot()
+            if zip_temp.empty else
+            sns.boxplot(
+                x="ZipCode",
+                y="loss_ratio_building",
+                palette=["r", "g"],
+                data=zip_temp
+            )
+        )
+        ax.set_xlabel('Zip Code')
+        ax.set_ylabel('Building Loss Ratio')
+        fig = ax.get_figure()
+        fig.set_size_inches(4.5, 5)
+        fig.savefig(zip_URL)
+        plt.close(fig)
+        return render_template(
+            "my_map.html",
+            lat=request.form.get("latitude"),
+            lon=request.form.get("longitude"),
+            col=col,
+            LR=LR,
+            len_image=True if ax.lines else False,
+            zip_URL=zip_URL,
+            min_LR=round(zip_temp['loss_ratio_building'].min(), 2),
+            max_LR=round(zip_temp['loss_ratio_building'].max(), 2),
+            mean_LR=round(zip_temp['loss_ratio_building'].mean(), 2),
+            len_zip=len(zip_temp),
+            zip=request.form.get("zipcode")
+        )
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # Forget any user_id
     session.clear()
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
-
-        # Query database for username
-        rows = db.execute(
+    if not request.method == "POST":
+        return render_template("login.html")
+    else:
+        potential_user = db.execute(
             """
             SELECT * 
             FROM accounts 
@@ -253,68 +229,60 @@ def login():
             """,
             username=request.form.get("username")
         )
-
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
-
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["uid"]
-
-        # Redirect user to home page
-        return render_template("input.html")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html")
+        user = next(iter(potential_user), {})
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+        elif not user:
+            return apology("username does not exist", 403)
+        elif not check_password_hash(user["hash"], request.form.get("password")):
+            return apology("password does not match", 403)
+        else:
+            session["user_id"] = user["uid"]
+            return render_template("input.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-
-        if not request.form.get("username"):
-            return apology("Must provide username", 400)
-        elif not request.form.get("password"):
-            return apology("Must provide password", 400)
-        elif request.form.get("password") != request.form.get("confirmation"):
-            return apology("Password do not match", 400)
-
-        hash = generate_password_hash(request.form.get("password"))
-
-        check_user_id = db.execute(
+    if not request.method == "POST":
+        return render_template("register.html")    
+    else:
+        potential_user = db.execute(
             """
             SELECT * 
             FROM accounts 
             WHERE username = :username
             """,
-            username=request.form.get("username"))
-
-        if len(check_user_id) >= 1:
-            return apology("username taken", 400)
-
-        new_user_id = db.execute(
-            """
-            INSERT INTO accounts (username, hash) 
-            VALUES (:username, :hash)
-            """,
-            username=request.form.get("username"),
-            hash=hash
-        )
-        session["user_id"] = new_user_id
-        flash("Registered")
-
-        return render_template("input.html")
-
-    else:
-        return render_template("register.html")
+            username=request.form.get("username")
+        )            
+        user = next(iter(potential_user), {})
+        if not request.form.get("username"):
+            return apology("must provide username", 400)
+        elif not request.form.get("password"):
+            return apology("must provide password", 400)
+        elif request.form.get("password") != request.form.get("confirmation"):
+            return apology("passwords do not match", 400)
+        elif user:
+            return apology("username already taken", 400)
+        else:
+            hash = generate_password_hash(request.form.get("password"))
+            new_user_id = db.execute(
+                """
+                INSERT INTO accounts (username, hash) 
+                VALUES (:username, :hash)
+                """,
+                username=request.form.get("username"),
+                hash=hash
+            )
+            session["user_id"] = new_user_id
+            flash("Registered")
+            return render_template("input.html")
 
 
 @app.route("/logout")
 def logout():
-    # Forget any user_id
     session.clear()
-    # Redirect user to login form
     return redirect("/")
 
 
@@ -354,8 +322,7 @@ def history():
             user_id=session["user_id"]
         )
         return render_template("history.html", transactions=transactions)
-
-    elif request.method == "POST":
+    else:
         db.execute(
             """
             DELETE 
