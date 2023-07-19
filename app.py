@@ -3,14 +3,13 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from cs50 import SQL
 from flask import Flask, render_template, request, redirect, flash, session
 from flask_session import Session
 from sklearn.externals import joblib
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import open_db, apology, login_required
 
 
 app = Flask(__name__)
@@ -34,7 +33,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 
 Session(app)
-db = SQL("sqlite:///users.db")
+db = open_db()
 zip_agg = pd.read_csv("Zip_Aggregate.csv")
 loaded_model = joblib.load('str_model.pkl')
 

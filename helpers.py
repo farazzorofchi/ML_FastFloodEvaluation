@@ -1,9 +1,61 @@
 import os
 import requests
+import sqlite3
 import urllib.parse
 from functools import wraps
 
+from cs50 import SQL
 from flask import redirect, render_template, session
+
+
+def open_db():
+    try:
+        return SQL("sqlite:///users.db")
+    except RuntimeError:
+        conn = sqlite3.connect('users.db')
+        cur = conn.cursor()
+        cur.execute(
+            """
+            CREATE TABLE address (
+                uid INTEGER, 
+                agr TEXT, 
+                basement TEXT,
+                condo TEXT,
+                policycount INTEGER,
+                crsdiscount FLOAT,
+                elevatedbuilding TEXT,
+                elevationdifference FLOAT,
+                floodzone TEXT,
+                houseworship TEXT,
+                locationofcontents INTEGER,
+                latitude FLOAT,
+                longitude FLOAT,
+                numstories INTEGER,
+                nonprofit TEXT,
+                obstructiontype TEXT,
+                occupancytype TEXT,
+                postfirm TEXT,
+                yearbuilt INTEGER,
+                zipcode INTEGER,
+                yearofloss INTEGER,
+                lossratio FLOAT,
+                date DATE NOT NULL DEFAULT CURRENT_DATE
+            );
+            """
+        )
+        cur.execute(
+            """
+            CREATE TABLE accounts (
+                uid INTEGER PRIMARY KEY AUTOINCREMENT ,
+                username TEXT NOT NULL,
+                hash TEXT NOT NULL,
+                numaddresses INTEGER  NOT NULL DEFAULT 0
+            );
+            """
+        )
+        conn.commit()
+        conn.close()
+        return SQL("sqlite:///users.db")
 
 
 def apology(message, code=400):
