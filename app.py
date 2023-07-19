@@ -51,45 +51,45 @@ def input():
         return render_template("input.html")
     else:
         zip_temp = zip_agg[
-            zip_agg['ZipCode'] == int(request.form.get("zipcode"))
+            zip_agg['reported_zip_code'] == int(request.form.get("reported_zip_code"))
         ]
-        zip_URL = f"static/{int(request.form.get('zipcode'))}.png"
+        zip_URL = f"static/{int(request.form.get('reported_zip_code'))}.png"
         df = (
             pd
             .DataFrame({
-                'agriculturestructureindicator': [request.form.get("agriculture")],
-                'basementenclosurecrawlspacetype': [request.form.get("basement")],
-                'condominiumindicator': [request.form.get("condominium")],
-                'policycount': [request.form.get("policycount")],
-                'crsdiscount': [request.form.get("crsdiscount")],
-                'elevatedbuildingindicator': [request.form.get("elevatedbuilding")],
-                'elevationdifference': [request.form.get("elevationdifference")],
-                'floodzone': [request.form.get("floodzone")],
-                'houseworship': [request.form.get("houseworship")],
+                'agriculture_structure_indicator': [request.form.get("agriculture_structure_indicator")],
+                'basement_enclosure_crawlspace_type': [request.form.get("basement_enclosure_crawlspace_type")],
+                'condominium_coverage_type_code': [request.form.get("condominium_coverage_type_code")],
+                'policy_count': [request.form.get("policy_count")],
+                'crs_classification_code': [request.form.get("crs_classification_code")],
+                'elevated_building_indicator': [request.form.get("elevated_building_indicator")],
+                'elevation_difference': [request.form.get("elevation_difference")],
+                'rated_flood_zone': [request.form.get("rated_flood_zone")],
+                'house_worship': [request.form.get("house_worship")],
                 'latitude': [request.form.get("latitude")],
-                'locationofcontents': [request.form.get("locationofcontents")],
+                'location_of_contents': [request.form.get("location_of_contents")],
                 'longitude': [request.form.get("longitude")],
-                'numberoffloorsintheinsuredbuilding': [request.form.get("numberofstories")],
-                'nonprofitindicator': [request.form.get("nonprofit")],
-                'obstructiontype': [request.form.get("obstruction")],
-                'occupancytype': [request.form.get("occupancy")],
-                'postfirmconstructionindicator': [request.form.get("postfirm")],
-                'yearofloss': [request.form.get("damageyear")],
-                'yearbuilt': [request.form.get("yearbuilt")],
-                'ZipCode': [request.form.get("zipcode")]
+                'number_of_floors_in_the_insured_building': [request.form.get("number_of_floors_in_the_insured_building")],
+                'non_profit_indicator': [request.form.get("non_profit_indicator")],
+                'obstruction_type': [request.form.get("obstruction_type")],
+                'occupancy_type': [request.form.get("occupancy_type")],
+                'post_f_i_r_m_construction_indicator': [request.form.get("post_f_i_r_m_construction_indicator")],
+                'year_of_loss': [request.form.get("year_of_loss")],
+                'original_construction_date': [request.form.get("original_construction_date")],
+                'reported_zip_code': [request.form.get("reported_zip_code")]
             })
             .astype({
-                'basementenclosurecrawlspacetype': 'float',
-                'policycount': 'float',
-                'crsdiscount': 'float',
-                'elevationdifference': 'float',
+                'basement_enclosure_crawlspace_type': 'float',
+                'policy_count': 'float',
+                'crs_classification_code': 'float',
+                'elevation_difference': 'float',
                 'latitude': 'float',
                 'longitude': 'float',
-                'numberoffloorsintheinsuredbuilding': 'float',
-                'occupancytype': 'float',
-                'yearofloss': 'int',
-                'yearbuilt': 'int',
-                'ZipCode': 'int',
+                'number_of_floors_in_the_insured_building': 'float',
+                'occupancy_type': 'float',
+                'year_of_loss': 'int',
+                'original_construction_date': 'int',
+                'reported_zip_code': 'int',
             })
         )
         LR = float(round(loaded_model.predict(df)[0], 2))
@@ -103,80 +103,80 @@ def input():
             """
             INSERT INTO address (
                 uid, 
-                agr, 
-                basement, 
-                condo, 
-                policycount, 
-                crsdiscount, 
-                elevatedbuilding, 
-                elevationdifference, 
-                floodzone, 
-                houseworship, 
-                locationofcontents, 
+                agriculture_structure_indicator, 
+                basement_enclosure_crawlspace_type, 
+                condominium_coverage_type_code, 
+                policy_count, 
+                crs_classification_code, 
+                elevated_building_indicator, 
+                elevation_difference, 
+                rated_flood_zone, 
+                house_worship, 
+                location_of_contents, 
                 latitude, 
                 longitude, 
-                numstories, 
-                nonprofit, 
-                obstructiontype, 
-                occupancytype, 
-                postfirm, 
-                yearbuilt, 
-                zipcode, 
-                yearofloss,
-                lossratio
+                number_of_floors_in_the_insured_building, 
+                non_profit_indicator, 
+                obstruction_type, 
+                occupancy_type, 
+                post_f_i_r_m_construction_indicator, 
+                original_construction_date, 
+                reported_zip_code, 
+                year_of_loss,
+                predicted_loss_ratio
             ) 
             VALUES (
                 :user_id, 
-                :agriculture, 
-                :basement, 
-                :condominium, 
-                :policycount, 
-                :crsdiscount, 
-                :elevatedbuilding, 
-                :elevationdifference, 
-                :floodzone, 
-                :houseworship, 
-                :locationofcontents, 
+                :agriculture_structure_indicator, 
+                :basement_enclosure_crawlspace_type, 
+                :condominium_coverage_type_code, 
+                :policy_count, 
+                :crs_classification_code, 
+                :elevated_building_indicator, 
+                :elevation_difference, 
+                :rated_flood_zone, 
+                :house_worship, 
+                :location_of_contents, 
                 :latitude, 
                 :longitude, 
-                :numstories, 
-                :nonprofit, 
-                :obstructiontype, 
-                :occupancytype, 
-                :postfirm, 
-                :yearbuilt, 
-                :zipcode, 
-                :yearofloss,
-                :lossratio
+                :number_of_floors_in_the_insured_building, 
+                :non_profit_indicator, 
+                :obstruction_type, 
+                :occupancy_type, 
+                :post_f_i_r_m_construction_indicator, 
+                :original_construction_date, 
+                :reported_zip_code, 
+                :year_of_loss,
+                :predicted_loss_ratio
             )
             """,
             user_id=session["user_id"],
-            agriculture=request.form.get("agriculture"),
-            basement=request.form.get("basement"),
-            condominium=request.form.get("condominium"),
-            policycount=request.form.get("policycount"),
-            crsdiscount=request.form.get("crsdiscount"),
-            elevatedbuilding=request.form.get("elevatedbuilding"),
-            elevationdifference=request.form.get("elevationdifference"),
-            floodzone=request.form.get("floodzone"),
-            houseworship=request.form.get("houseworship"),
-            locationofcontents=request.form.get("locationofcontents"),
+            agriculture_structure_indicator=request.form.get("agriculture_structure_indicator"),
+            basement_enclosure_crawlspace_type=request.form.get("basement_enclosure_crawlspace_type"),
+            condominium_coverage_type_code=request.form.get("condominium_coverage_type_code"),
+            policy_count=request.form.get("policy_count"),
+            crs_classification_code=request.form.get("crs_classification_code"),
+            elevated_building_indicator=request.form.get("elevated_building_indicator"),
+            elevation_difference=request.form.get("elevation_difference"),
+            rated_flood_zone=request.form.get("rated_flood_zone"),
+            house_worship=request.form.get("house_worship"),
+            location_of_contents=request.form.get("location_of_contents"),
             latitude=request.form.get("latitude"),
             longitude=request.form.get("longitude"),
-            numstories=request.form.get("numberofstories"),
-            nonprofit=request.form.get("nonprofit"),
-            obstructiontype=request.form.get("obstruction"),
-            occupancytype=request.form.get("occupancy"),
-            postfirm=request.form.get("postfirm"),
-            yearbuilt=request.form.get("yearbuilt"),
-            zipcode=request.form.get("zipcode"),
-            yearofloss=request.form.get("damageyear"),
-            lossratio=LR
+            number_of_floors_in_the_insured_building=request.form.get("number_of_floors_in_the_insured_building"),
+            non_profit_indicator=request.form.get("non_profit_indicator"),
+            obstruction_type=request.form.get("obstruction_type"),
+            occupancy_type=request.form.get("occupancy_type"),
+            post_f_i_r_m_construction_indicator=request.form.get("post_f_i_r_m_construction_indicator"),
+            original_construction_date=request.form.get("original_construction_date"),
+            reported_zip_code=request.form.get("reported_zip_code"),
+            year_of_loss=request.form.get("year_of_loss"),
+            predicted_loss_ratio=LR
         )
         db.execute(
             """
             UPDATE accounts 
-            SET numaddresses = numaddresses + 1 
+            SET number_of_adresses = number_of_adresses + 1 
             WHERE uid = :user_id
             """,
             user_id=session["user_id"]
@@ -186,7 +186,7 @@ def input():
             sns.boxplot()
             if zip_temp.empty else
             sns.boxplot(
-                x="ZipCode",
+                x="reported_zip_code",
                 y="loss_ratio_building",
                 palette=["r", "g"],
                 data=zip_temp
@@ -210,7 +210,7 @@ def input():
             max_LR=round(zip_temp['loss_ratio_building'].max(), 2),
             mean_LR=round(zip_temp['loss_ratio_building'].mean(), 2),
             len_zip=len(zip_temp),
-            zip=request.form.get("zipcode")
+            zip=request.form.get("reported_zip_code")
         )
 
 
@@ -293,27 +293,27 @@ def history():
         transactions = db.execute(
             """
             SELECT 
-                agr, 
-                basement, 
-                condo, 
-                policycount, 
-                crsdiscount, 
-                elevatedbuilding, 
-                elevationdifference, 
-                floodzone, 
-                houseworship, 
-                locationofcontents, 
+                agriculture_structure_indicator, 
+                basement_enclosure_crawlspace_type, 
+                condominium_coverage_type_code, 
+                policy_count, 
+                crs_classification_code, 
+                elevated_building_indicator, 
+                elevation_difference, 
+                rated_flood_zone, 
+                house_worship, 
+                location_of_contents, 
                 latitude, 
                 longitude, 
-                numstories, 
-                nonprofit, 
-                obstructiontype, 
-                occupancytype, 
-                postfirm, 
-                yearbuilt, 
-                zipcode, 
+                number_of_floors_in_the_insured_building, 
+                non_profit_indicator, 
+                obstruction_type, 
+                occupancy_type, 
+                post_f_i_r_m_construction_indicator, 
+                original_construction_date, 
+                reported_zip_code, 
                 date, 
-                lossratio 
+                predicted_loss_ratio 
             FROM address 
             WHERE uid = :user_id 
             ORDER BY date ASC

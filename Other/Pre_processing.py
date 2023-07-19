@@ -5,152 +5,152 @@ import numpy as np
 
 
 data = pd.read_csv('openFEMA_claims20190831.csv')
-data['amountpaidonincreasedcostofcomplianceclaim'] = (
-    data['amountpaidonincreasedcostofcomplianceclaim'].fillna(0)
+data['amount_paid_on_increased_cost_of_compliance_claim'] = (
+    data['amount_paid_on_increased_cost_of_compliance_claim'].fillna(0)
 )
-data['amountpaidonbuildingclaim'] = data['amountpaidonbuildingclaim'].fillna(0)
-data['amountpaidoncontentsclaim'] = data['amountpaidoncontentsclaim'].fillna(0)
-data['TIV'] = (
-    data['totalbuildinginsurancecoverage'] +
-    data['totalcontentsinsurancecoverage']
+data['amount_paid_on_building_claim'] = data['amount_paid_on_building_claim'].fillna(0)
+data['amount_paid_on_contents_claim'] = data['amount_paid_on_contents_claim'].fillna(0)
+data['total_insurance_value'] = (
+    data['total_building_insurance_coverage'] +
+    data['total_contents_insurance_coverage']
 )
-data['LOSS'] = (
-    data['amountpaidonbuildingclaim'] +
-    data['amountpaidoncontentsclaim']
+data['total_loss'] = (
+    data['amount_paid_on_building_claim'] +
+    data['amount_paid_on_contents_claim']
 )
 data['loss_ratio_building'] = (
-    data['amountpaidonbuildingclaim'] /
-    data['totalbuildinginsurancecoverage']
+    data['amount_paid_on_building_claim'] /
+    data['total_building_insurance_coverage']
 )
 data['loss_ratio_content'] = (
-    data['amountpaidoncontentsclaim'] /
-    data['totalcontentsinsurancecoverage']
+    data['amount_paid_on_contents_claim'] /
+    data['total_contents_insurance_coverage']
 )
-data['loss_ratio_overall'] = data['LOSS'] / data['TIV']
+data['total_loss_ratio'] = data['total_loss'] / data['total_insurance_value']
 
 # Keep only year for year built of the building
-yearbuilt = []
+original_construction_date = []
 for i in range(0, len(data)):
     try:
-        yearbuilt.append(int(data['originalconstructiondate'][i][:4]))
+        original_construction_date.append(int(data['original_construction_date'][i][:4]))
     except:
-        yearbuilt.append(random.randint(1970, 2019))
-data['yearbuilt'] = yearbuilt
+        original_construction_date.append(random.randint(1970, 2019))
+data['original_construction_date'] = original_construction_date
 
 # Generalize Flood Zones:
-FloodZone = []
+rated_flood_zone = []
 for i in range(0, len(data)):
     try:
-        if data['floodzone'][i][:2] == 'AO':
-            FloodZone.append('AO')
-        elif data['floodzone'][i][:2] == 'AH':
-            FloodZone.append('AH')
-        elif data['floodzone'][i][:2] == 'AR':
-            FloodZone.append('AR')
-        elif data['floodzone'][i][:2] == 'AE':
-            FloodZone.append('AE')
-        elif data['floodzone'][i][:2] == 'VE':
-            FloodZone.append('VE')
-        elif data['floodzone'][i][:3] == 'A99':
-            FloodZone.append('A99')
-        elif data['floodzone'][i][0] == 'A':
-            if len(data['floodzone'][i][0]) > 2:
-                FloodZone.append('AE')
+        if data['rated_flood_zone'][i][:2] == 'AO':
+            rated_flood_zone.append('AO')
+        elif data['rated_flood_zone'][i][:2] == 'AH':
+            rated_flood_zone.append('AH')
+        elif data['rated_flood_zone'][i][:2] == 'AR':
+            rated_flood_zone.append('AR')
+        elif data['rated_flood_zone'][i][:2] == 'AE':
+            rated_flood_zone.append('AE')
+        elif data['rated_flood_zone'][i][:2] == 'VE':
+            rated_flood_zone.append('VE')
+        elif data['rated_flood_zone'][i][:3] == 'A99':
+            rated_flood_zone.append('A99')
+        elif data['rated_flood_zone'][i][0] == 'A':
+            if len(data['rated_flood_zone'][i][0]) > 2:
+                rated_flood_zone.append('AE')
             else:
-                FloodZone.append('A')
-        elif data['floodzone'][i][0] == 'V':
-            if len(data['floodzone'][i][0]) > 2:
-                FloodZone.append('VE')
+                rated_flood_zone.append('A')
+        elif data['rated_flood_zone'][i][0] == 'V':
+            if len(data['rated_flood_zone'][i][0]) > 2:
+                rated_flood_zone.append('VE')
             else:
-                FloodZone.append('V')
-        elif data['floodzone'][i][0] == 'X':
-            FloodZone.append('X')
-        elif data['floodzone'][i][0] == 'B':
-            FloodZone.append('X')
-        elif data['floodzone'][i][0] == 'C':
-            FloodZone.append('X')
+                rated_flood_zone.append('V')
+        elif data['rated_flood_zone'][i][0] == 'X':
+            rated_flood_zone.append('X')
+        elif data['rated_flood_zone'][i][0] == 'B':
+            rated_flood_zone.append('X')
+        elif data['rated_flood_zone'][i][0] == 'C':
+            rated_flood_zone.append('X')
         else:
-            FloodZone.append('UNK')
+            rated_flood_zone.append('UNK')
     except:
-        FloodZone.append('UNK')
-data['floodzone'] = FloodZone
+        rated_flood_zone.append('UNK')
+data['rated_flood_zone'] = rated_flood_zone
 
-zipcode = []
+reported_zip_code = []
 for i in range(0, len(data)):
     try:
-        if int(data['reportedzipcode'][i]) > 100:
-            zipcode.append(int(data['reportedzipcode'][i]))
+        if int(data['reported_zip_code'][i]) > 100:
+            reported_zip_code.append(int(data['reported_zip_code'][i]))
         else:
-            zipcode.append(-999999)
+            reported_zip_code.append(-999999)
     except:
-        zipcode.append(-999999)
-data['ZipCode'] = zipcode
+        reported_zip_code.append(-999999)
+data['reported_zip_code'] = reported_zip_code
 
 for i in range(0, len(data)):
     if (
-        (not np.isnan(data['lowestfloorelevation'][i])) &
-        (not np.isnan(data['basefloodelevation'][i]))
+        (not np.isnan(data['lowest_floor_elevation'][i])) &
+        (not np.isnan(data['base_flood_elevation'][i]))
     ):
-        data['elevationdifference'][i] = (
-            data['lowestfloorelevation'][i] -
-            data['basefloodelevation'][i]
+        data['elevation_difference'][i] = (
+            data['lowest_floor_elevation'][i] -
+            data['base_flood_elevation'][i]
         )
 
-data = data[data['elevationdifference'] != 999]
+data = data[data['elevation_difference'] != 999]
 data.reset_index(drop=True, inplace=True)
-data.drop('asofdate', axis=1, inplace=True)
-data.drop('countycode', axis=1, inplace=True)
-data.drop('censustract', axis=1, inplace=True)
-data.drop('reportedcity', axis=1, inplace=True)
-data.drop('dateofloss', axis=1, inplace=True)
-data.drop('elevationcertificateindicator', axis=1, inplace=True)
-data.drop('lowestadjacentgrade', axis=1, inplace=True)
-data.drop('lowestfloorelevation', axis=1, inplace=True)
-data.drop('basefloodelevation', axis=1, inplace=True)
-data.drop('originalconstructiondate', axis=1, inplace=True)
-data.drop('originalnbdate', axis=1, inplace=True)
-data.drop('amountpaidonincreasedcostofcomplianceclaim', axis=1, inplace=True)
+data.drop('as_of_date', axis=1, inplace=True)
+data.drop('county_code', axis=1, inplace=True)
+data.drop('census_tract', axis=1, inplace=True)
+data.drop('reported_city', axis=1, inplace=True)
+data.drop('date_of_loss', axis=1, inplace=True)
+data.drop('elevation_certificate_indicator', axis=1, inplace=True)
+data.drop('lowest_adjacent_grade', axis=1, inplace=True)
+data.drop('lowest_floor_elevation', axis=1, inplace=True)
+data.drop('base_flood_elevation', axis=1, inplace=True)
+data.drop('original_construction_date', axis=1, inplace=True)
+data.drop('original_n_b_date', axis=1, inplace=True)
+data.drop('amount_paid_on_increased_cost_of_compliance_claim', axis=1, inplace=True)
 data.drop('ratemethod', axis=1, inplace=True)
-data.drop('smallbusinessindicatorbuilding', axis=1, inplace=True)
+data.drop('small_business_indicator_building', axis=1, inplace=True)
 data.drop('state', axis=1, inplace=True)
-data.drop('reportedzipcode', axis=1, inplace=True)
-data.drop('primaryresidence', axis=1, inplace=True)
+data.drop('reported_zip_code', axis=1, inplace=True)
+data.drop('primary_residence_indicator', axis=1, inplace=True)
 print('len(data) before cleaning =', len(data))
 
 delete_row = data[np.isnan(data['latitude'])].index
 data = data.drop(delete_row)
 delete_row = data[np.isnan(data['longitude'])].index
 data = data.drop(delete_row)
-delete_row = data[np.isnan(data['numberoffloorsintheinsuredbuilding'])].index
+delete_row = data[np.isnan(data['number_of_floors_in_the_insured_building'])].index
 data = data.drop(delete_row)
 
 # Keeping only up to 30 feet difference
 data = data[
-    (data['elevationdifference'] <= 30) &
-    (data['elevationdifference'] >= -30)
+    (data['elevation_difference'] <= 30) &
+    (data['elevation_difference'] >= -30)
 ]
-data = data[data['yearbuilt'] >= 1800]
-data = data[data['nonprofitindicator'] != '0']
-data = data[data['ZipCode'] != -999999]
-data = data[data['TIV'] != 0]
-data = data[data['obstructiontype'] != '*']
-data['obstructiontype'] = pd.to_numeric(data['obstructiontype'])
-data['obstructiontype'] = data['obstructiontype'].astype(str)
-data['obstructiontype'].fillna('UNK', inplace=True)
-data['obstructiontype'][data['obstructiontype'] == 'nan'] = 'UNK'
-data['agriculturestructureindicator'].fillna('N', inplace=True)
-data['basementenclosurecrawlspacetype'].fillna(0, inplace=True)
-data['condominiumindicator'].fillna('N', inplace=True)
-data['policycount'].fillna(1, inplace=True)
-data['crsdiscount'].fillna(0, inplace=True)
-data['elevatedbuildingindicator'].fillna('UNK', inplace=True)
-data['floodzone'].fillna('UNK', inplace=True)
-data['houseworship'].fillna('N', inplace=True)
-data['locationofcontents'].fillna('UNK', inplace=True)
-data['nonprofitindicator'].fillna('N', inplace=True)
-data['occupancytype'].fillna(1.0, inplace=True)
-data['postfirmconstructionindicator'].fillna('UNK', inplace=True)
-data = data[data['floodzone'] != 'UNK']
+data = data[data['original_construction_date'] >= 1800]
+data = data[data['non_profit_indicator'] != '0']
+data = data[data['reported_zip_code'] != -999999]
+data = data[data['total_insurance_value'] != 0]
+data = data[data['obstruction_type'] != '*']
+data['obstruction_type'] = pd.to_numeric(data['obstruction_type'])
+data['obstruction_type'] = data['obstruction_type'].astype(str)
+data['obstruction_type'].fillna('UNK', inplace=True)
+data['obstruction_type'][data['obstruction_type'] == 'nan'] = 'UNK'
+data['agriculture_structure_indicator'].fillna('N', inplace=True)
+data['basement_enclosure_crawlspace_type'].fillna(0, inplace=True)
+data['condominium_coverage_type_code'].fillna('N', inplace=True)
+data['policy_count'].fillna(1, inplace=True)
+data['crs_classification_code'].fillna(0, inplace=True)
+data['elevated_building_indicator'].fillna('UNK', inplace=True)
+data['rated_flood_zone'].fillna('UNK', inplace=True)
+data['house_worship'].fillna('N', inplace=True)
+data['location_of_contents'].fillna('UNK', inplace=True)
+data['non_profit_indicator'].fillna('N', inplace=True)
+data['occupancy_type'].fillna(1.0, inplace=True)
+data['post_f_i_r_m_construction_indicator'].fillna('UNK', inplace=True)
+data = data[data['rated_flood_zone'] != 'UNK']
 data.reset_index(drop=True, inplace=True)
 print('len(data) after cleaning =', len(data))
 

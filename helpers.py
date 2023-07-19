@@ -18,27 +18,27 @@ def open_db():
             """
             CREATE TABLE address (
                 uid INTEGER, 
-                agr TEXT, 
-                basement TEXT,
-                condo TEXT,
-                policycount INTEGER,
-                crsdiscount FLOAT,
-                elevatedbuilding TEXT,
-                elevationdifference FLOAT,
-                floodzone TEXT,
-                houseworship TEXT,
-                locationofcontents INTEGER,
+                agriculture_structure_indicator TEXT, 
+                basement_enclosure_crawlspace_type TEXT,
+                condominium_coverage_type_code TEXT,
+                policy_count INTEGER,
+                crs_classification_code FLOAT,
+                elevated_building_indicator TEXT,
+                elevation_difference FLOAT,
+                rated_flood_zone TEXT,
+                house_worship TEXT,
+                location_of_contents INTEGER,
                 latitude FLOAT,
                 longitude FLOAT,
-                numstories INTEGER,
-                nonprofit TEXT,
-                obstructiontype TEXT,
-                occupancytype TEXT,
-                postfirm TEXT,
-                yearbuilt INTEGER,
-                zipcode INTEGER,
-                yearofloss INTEGER,
-                lossratio FLOAT,
+                number_of_floors_in_the_insured_building INTEGER,
+                non_profit_indicator TEXT,
+                obstruction_type TEXT,
+                occupancy_type TEXT,
+                post_f_i_r_m_construction_indicator TEXT,
+                original_construction_date INTEGER,
+                reported_zip_code INTEGER,
+                year_of_loss INTEGER,
+                predicted_loss_ratio FLOAT,
                 date DATE NOT NULL DEFAULT CURRENT_DATE
             );
             """
@@ -49,7 +49,7 @@ def open_db():
                 uid INTEGER PRIMARY KEY AUTOINCREMENT ,
                 username TEXT NOT NULL,
                 hash TEXT NOT NULL,
-                numaddresses INTEGER  NOT NULL DEFAULT 0
+                number_of_adresses INTEGER  NOT NULL DEFAULT 0
             );
             """
         )
