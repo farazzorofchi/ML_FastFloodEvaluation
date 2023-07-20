@@ -13,12 +13,12 @@
         <br>
         <div>
             <label style="float:left;" for="agr"> Agricultural structure</label>
-            <select style="float:left; margin-left:3px;" id="agr" name="agriculture">
+            <select style="float:left; margin-left:3px;" id="agr" name="agriculture_structure_indicator">
                 <option value="N">No</option>
                 <option value="Y">Yes</option>
             </select>
             <label style="padding: 0px 0px 0px 200px;" for="base" >Basement</label>
-            <select id="base" name="basement">
+            <select id="base" name="basement_enclosure_crawlspace_type">
                 <option value="0.0">Without</option>
                 <option value="1.0">1</option>
                 <option value="2.0">2</option>
@@ -30,7 +30,7 @@
 
         <div>
                 <label style="float:left;" for="cnd"> Condominium indicator</label>
-                <select style="float:left; margin-left:3px;" id="cnd" name="condominium">
+                <select style="float:left; margin-left:3px;" id="cnd" name="condominium_coverage_type_code">
                     <option value="N">N</option>
                     <option value="U">U</option>
                     <option value="A">A </option>
@@ -38,15 +38,15 @@
                     <option value="L">L </option>
                 </select>
                 <label style="padding: 0px 0px 0px 200px;" for="plc" > Policy Count</label>
-                <input autocomplete="off" autofocus name="policycount" id="plc" placeholder="1" type="number" min="1" required/>
+                <input autocomplete="off" autofocus name="policy_count" id="plc" placeholder="1" type="number" min="1" required/>
         </div>
         <p> </p>
 
         <div>
             <label style="float:left;"  for="crs"> CRS Discount </label>
-            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="crsdiscount" id="crs" placeholder="0" type="number" step=".05" min ="0" max="0.5" required/>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="crs_classification_code" id="crs" placeholder="0" type="number" step=".05" min ="0" max="0.5" required/>
             <label style="padding: 0px 0px 0px 240px;" for="elvstr" > Elevated Building</label>
-            <select id="elvstr" name="elevatedbuilding">
+            <select id="elvstr" name="elevated_building_indicator">
                 <option value="UNK">Unknown</option>
                 <option value="N">No</option>
                 <option value="Y">Yes</option>
@@ -56,9 +56,9 @@
 
         <div>
             <label style="float:left;" for="elvdiff"> Elevation Difference</label>
-            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="elevationdifference" id="elvdiff" placeholder="0" type="number" step=".1" required/>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="elevation_difference" id="elvdiff" placeholder="0" type="number" step=".1" required/>
             <label style="padding: 0px 0px 0px 83px;" for="fldzone" > Flood Zone</label>
-            <select id="fldzone" name="floodzone">
+            <select id="fldzone" name="rated_flood_zone">
                 <option value="A">A </option>
                 <option value="AE">AE </option>
                 <option value="V">V </option>
@@ -74,12 +74,12 @@
 
         <div>
             <label style="float:left;" for="house"> House Worship</label>
-            <select style="float:left;margin-left:3px;" id="house" name="houseworship">
+            <select style="float:left;margin-left:3px;" id="house" name="house_worship">
                 <option value="N">No</option>
                 <option value="Y">Yes</option>
             </select>
             <label style="padding: 0px 0px 0px 245px;" for="loccnt" > Location of Contents</label>
-            <select id="loccnt" name="locationofcontents">
+            <select id="loccnt" name="location_of_contents">
                 <option value="UNK">Unknown</option>
                 <option value="Basement/Enclosure/Crawlspace/Subgrade Crawlspace only">1 </option>
                 <option value="Basement/Enclosure/Crawlspace/Subgrade Crawlspace and above">2 </option>
@@ -101,7 +101,7 @@
 
         <div>
             <label style="float:left;" for="numst"> Number of Stories</label>
-            <select style="float:left;margin-left:3px;" id="numst" name="numberofstories">
+            <select style="float:left;margin-left:3px;" id="numst" name="number_of_floors_in_the_insured_building">
                 <option value="1.0">1</option>
                 <option value="2.0">2 </option>
                 <option value="3.0">3 </option>
@@ -111,7 +111,7 @@
             </select>
 
             <label style="padding: 0px 0px 0px 242px;" for="nonprof" > Non-profit</label>
-            <select id="nonprof" name="nonprofit">
+            <select id="nonprof" name="non_profit_indicator">
                 <option value="N">No</option>
                 <option value="Y">Yes</option>
             </select>
@@ -120,7 +120,7 @@
 
         <div>
             <label style="float:left;" for="obs"> Obstruction Type</label>
-            <select style="float:left;margin-left:3px;" id="obs" name="obstruction">
+            <select style="float:left;margin-left:3px;" id="obs" name="obstruction_type">
                 <option value="UNK">Unknown</option>
                 <option value="10.0">10 </option>
                 <option value="15.0">15 </option>
@@ -142,7 +142,7 @@
                 <option value="98.0">98 </option>
             </select>
             <label style="padding: 0px 0px 0px 190px;" for="occ" > Occupancy type</label>
-            <select id="occ" name="occupancy">
+            <select id="occ" name="occupancy_type">
                 <option value="1.0">single family residence</option>
                 <option value="2.0">2 to 4 unit residential building</option>
                 <option value="3.0">residential building with more than 4 units</option>
@@ -153,22 +153,22 @@
 
         <div>
             <label style="float:left;" for="postf"> Post FIRM Structure</label>
-            <select style="float:left;margin-left:3px;" id="postf" name="postfirm">
+            <select style="float:left;margin-left:3px;" id="postf" name="post_f_i_r_m_construction_indicator">
                 <option value="N">No</option>
                 <option value="Y">Yes</option>
                 <option value="UNK">Unknown</option>
             </select>
             <label style="padding: 0px 0px 0px 170px;" for="year" > Year Built</label>
-            <input autocomplete="off" autofocus name="yearbuilt" id="year" placeholder="2006" type="number" min="1899" max="2021" required/>
+            <input autocomplete="off" autofocus name="original_construction_date" id="year" placeholder="2006" type="number" min="1899" max="2021" required/>
         </div>
         <p> </p>
 
         <div>
             <label style="float:left;"  for="damyear"> Year of Loss</label>
-            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="damageyear" id="damyear" placeholder="2020" type="number" required/>
+            <input style="float:left;margin-left:3px;" autocomplete="off" autofocus name="year_of_loss" id="damyear" placeholder="2020" type="number" required/>
 
             <label style="padding: 0px 0px 0px 145px;" for="zip"> ZIP Code</label>
-            <input autocomplete="off" autofocus name="zipcode" id="zip" placeholder="99714" type="number" required/>
+            <input autocomplete="off" autofocus name="reported_zip_code" id="zip" placeholder="99714" type="number" required/>
 
         </div>
 

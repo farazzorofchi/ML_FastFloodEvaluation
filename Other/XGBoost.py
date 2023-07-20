@@ -9,48 +9,27 @@ from sklearn.externals import joblib
 
 
 data = pd.read_csv('FEMA_Data_Cleaned_Regression.csv')
-data.drop('TIV', axis=1, inplace=True)
-data.drop('LOSS', axis=1, inplace=True)
-data['loss_ratio_building'][(data['totalbuildinginsurancecoverage'] == 0) & (
-    data['amountpaidonbuildingclaim'] != 0)
-] = 0
-data['loss_ratio_content'][(data['totalcontentsinsurancecoverage'] == 0) & (
-    data['amountpaidoncontentsclaim'] != 0)
-] = 0
-
-X = data
-X = X[X['loss_ratio_overall'] <= 1]
-X = X[X['loss_ratio_building'] <= 1]
-X = X[X['loss_ratio_content'] <= 1]
-
-y_all = X['loss_ratio_overall']
-y_building = X['loss_ratio_building']
-y_content = X['loss_ratio_content']
-
-X.drop('loss_ratio_overall', axis=1, inplace=True)
-X.drop('loss_ratio_building', axis=1, inplace=True)
-X.drop('loss_ratio_content', axis=1, inplace=True)
-X.drop('amountpaidonbuildingclaim', axis=1, inplace=True)
-X.drop('amountpaidoncontentsclaim', axis=1, inplace=True)
-X.drop('totalbuildinginsurancecoverage', axis=1, inplace=True)
-X.drop('totalcontentsinsurancecoverage', axis=1, inplace=True)
+X = data.drop(['total_loss_ratio', 'loss_ratio_building', 'loss_ratio_content'], axis=1)
+y_all = data['total_loss_ratio']
+y_building = data['loss_ratio_building']
+y_content = data['loss_ratio_content']
 
 transformer_name = 'OHE_on_all_categorical_features'
 transformer = OneHotEncoder(handle_unknown='ignore')
 columns_to_encode = [
-    'agriculturestructureindicator',
-    'basementenclosurecrawlspacetype',
-    'condominiumindicator',
-    'elevatedbuildingindicator',
-    'floodzone',
-    'houseworship',
-    'locationofcontents',
-    'numberoffloorsintheinsuredbuilding',
-    'nonprofitindicator',
-    'obstructiontype',
-    'occupancytype',
-    'postfirmconstructionindicator',
-    'ZipCode'
+    'agriculture_structure_indicator',
+    'basement_enclosure_crawlspace_type',
+    'condominium_coverage_type_code',
+    'elevated_building_indicator',
+    'rated_flood_zone',
+    'house_worship',
+    'location_of_contents',
+    'number_of_floors_in_the_insured_building',
+    'non_profit_indicator',
+    'obstruction_type',
+    'occupancy_type',
+    'post_f_i_r_m_construction_indicator',
+    'reported_zip_code'
 ]
 
 OHE_final = ColumnTransformer(

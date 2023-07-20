@@ -34,30 +34,29 @@
             </tr>
         </thead>
         <tbody>
-            {% for transaction in transactions %}
+            {% for item in transactions %}
                 <tr>
-                    <td>{{ transaction.agr }}</td>
-                    <td>{{ transaction.basement }}</td>
-                    <td>{{ transaction.condo }}</td>
-                    <td>{{ transaction.policycount }}</td>
-                    <td>{{ transaction.crsdiscount }}</td>
-                    <td>{{ transaction.elevatedbuilding }}</td>
-                    <td>{{ transaction.elevationdifference }}</td>
-                    <td>{{ transaction.floodzone }}</td>
-                    <td>{{ transaction.houseworship }}</td>
-                    <td>{{ transaction.locationofcontents }}</td>
-                    <td>{{ transaction.latitude }}</td>
-                    <td>{{ transaction.longitude }}</td>
-                    <td>{{ transaction.numstories }}</td>
-                    <td>{{ transaction.nonprofit }}</td>
-                    <td>{{ transaction.obstructiontype }}</td>
-                    <td>{{ transaction.occupancytype }}</td>
-                    <td>{{ transaction.postfirm }}</td>
-                    <td>{{ transaction.yearbuilt }}</td>
-                    <td>{{ transaction.zipcode }}</td>
-                    <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.lossratio }}</td>
-
+                    <td>{{ item.agriculture_structure_indicator }}</td>
+                    <td>{{ item.basement_enclosure_crawlspace_type }}</td>
+                    <td>{{ item.condominium_coverage_type_code }}</td>
+                    <td>{{ item.policy_count }}</td>
+                    <td>{{ item.crs_classification_code }}</td>
+                    <td>{{ item.elevated_building_indicator }}</td>
+                    <td>{{ item.elevation_difference }}</td>
+                    <td>{{ item.rated_flood_zone }}</td>
+                    <td>{{ item.house_worship }}</td>
+                    <td>{{ item.location_of_contents }}</td>
+                    <td>{{ item.latitude }}</td>
+                    <td>{{ item.longitude }}</td>
+                    <td>{{ item.number_of_floors_in_the_insured_building }}</td>
+                    <td>{{ item.non_profit_indicator }}</td>
+                    <td>{{ item.obstruction_type }}</td>
+                    <td>{{ item.occupancy_type }}</td>
+                    <td>{{ item.post_f_i_r_m_construction_indicator }}</td>
+                    <td>{{ item.original_construction_date }}</td>
+                    <td>{{ item.reported_zip_code }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.predicted_loss_ratio }}</td>
                 </tr>
             {% endfor %}
 
