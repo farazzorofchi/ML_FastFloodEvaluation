@@ -66,7 +66,6 @@ data_interim = (
         'occupancy_type': 1,  # Single family residence
         'post_f_i_r_m_construction_indicator': 0,  # Not post-FIRM
         'year_of_loss': 1700,  # Default invalid value, will be removed
-        # Default invalid value, will be removed
         'original_construction_date': '1700-01-01T00:00:00.000Z',
         'reported_zip_code': 0,  # Default invalid value, will be removed
     })
@@ -98,16 +97,6 @@ data_interim = (
         'reported_zip_code': 'int64',
     })
     .assign(
-        total_insurance_value=lambda x: (
-            x['total_building_insurance_coverage'] +
-            x['total_contents_insurance_coverage']
-        ),
-        total_loss=lambda x: (
-            x['amount_paid_on_building_claim'] +
-            x['amount_paid_on_contents_claim']
-        ),
-    )
-    .assign(
         loss_ratio_building=lambda x: (
             x['amount_paid_on_building_claim'] /
             x['total_building_insurance_coverage']
@@ -116,9 +105,12 @@ data_interim = (
             x['amount_paid_on_contents_claim'] /
             x['total_contents_insurance_coverage']
         ),
-        total_loss_ratio=lambda x: x['total_loss'] /
-        x['total_insurance_value'],
-    ))
+        total_loss_ratio=lambda x: (
+            (x['amount_paid_on_building_claim'] + x['amount_paid_on_contents_claim']) /
+            (x['total_building_insurance_coverage'] + x['total_contents_insurance_coverage'])
+        ),
+    )
+)
 
 # Keep only year for year built of the building
 
