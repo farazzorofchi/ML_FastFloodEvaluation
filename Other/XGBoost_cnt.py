@@ -9,31 +9,10 @@ from sklearn.externals import joblib
 
 
 data = pd.read_csv('FEMA_Data_Cleaned_Regression.csv')
-data.drop('total_insurance_value', axis=1, inplace=True)
-data.drop('total_loss', axis=1, inplace=True)
-data['loss_ratio_building'][(data['total_building_insurance_coverage'] == 0) & (
-    data['amount_paid_on_building_claim'] != 0)
-] = 0
-data['loss_ratio_content'][(data['total_contents_insurance_coverage'] == 0) & (
-    data['amount_paid_on_contents_claim'] != 0)
-] = 0
-
-X = data
-X = X[X['total_loss_ratio'] <= 1]
-X = X[X['loss_ratio_building'] <= 1]
-X = X[X['loss_ratio_content'] <= 1]
-
-y_all = X['total_loss_ratio']
-y_building = X['loss_ratio_building']
-y_content = X['loss_ratio_content']
-
-X.drop('total_loss_ratio', axis=1, inplace=True)
-X.drop('loss_ratio_building', axis=1, inplace=True)
-X.drop('loss_ratio_content', axis=1, inplace=True)
-X.drop('amount_paid_on_building_claim', axis=1, inplace=True)
-X.drop('amount_paid_on_contents_claim', axis=1, inplace=True)
-X.drop('total_building_insurance_coverage', axis=1, inplace=True)
-X.drop('total_contents_insurance_coverage', axis=1, inplace=True)
+X = data.drop(['total_loss_ratio', 'loss_ratio_building', 'loss_ratio_content'], axis=1)
+y_all = data['total_loss_ratio']
+y_building = data['loss_ratio_building']
+y_content = data['loss_ratio_content']
 
 transformer_name = 'OHE_on_all_categorical_features'
 transformer = OneHotEncoder(handle_unknown='ignore')
